@@ -41,10 +41,10 @@ create table users (
 create table team (
     id serial primary key,
     name text,
-    region integer references region(id),
+    region_id integer references region(id),
     rating float,
     photo text,
-    captain integer references users(id)
+    captain_id integer references users(id)
 );
 
 create table team_players (
@@ -54,19 +54,19 @@ create table team_players (
 
 create table favorite_sports (
     id serial primary key,
-    sport integer references sports(id),
+    sport_id integer references sports(id),
     user_id integer references users(id),
-    team integer references team(id)
+    team_id integer references team(id)
 );
 
 create table events (
     id serial primary key,
     title text,
-    region integer references region(id),
-    sport integer references sports(id),
+    region_id integer references region(id),
+    sport_id integer references sports(id),
     longitude float,
     latitude float,
-    winner integer references team(id),
+    winner_id integer references team(id),
     date date,
     description text,
     photo text,
@@ -87,8 +87,8 @@ create table scores (
 );
 
 create table challenges (
-    team_from integer references team(id),
-    team_to integer references team(id),
+    team_from_id integer references team(id),
+    team_to_id integer references team(id),
     datetime date,
     message text,
     wager integer,
