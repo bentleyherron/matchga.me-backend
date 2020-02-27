@@ -1,28 +1,31 @@
 {
   "name": "backend",
-  "version": "0.0.0",
-  "private": true,
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "start": "node ./bin/www",
-    "db:delete": "dropdb matchgame",
-    "db:create": "createdb matchgame",
-    "db:schema": "psql -f schema.sql matchgame",
-    "db:seed": "psql -f seed.sql matchgame",
-    "db:reset": "npm run db:delete; npm run db:create && npm run db:schema && npm run db:seed",
-    "dev": "nodemon --ignore './sessions/' ./bin/www"
+    "start": "node dist/index",
+    "webpack": "webpack --config webpack.config.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "dependencies": {
-    "compression": "^1.7.4",
-    "cookie-parser": "~1.4.4",
-    "debug": "~2.6.9",
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
-    "express": "~4.16.1",
-    "helmet": "^3.21.3",
-    "http-errors": "~1.6.3",
-    "morgan": "~1.9.1",
-    "pg-promise": "^10.4.4"
+    "express": "^4.17.1",
+    "helmet": "^3.21.3"
   },
   "devDependencies": {
-    "nodemon": "^2.0.2"
+    "@types/cors": "^2.8.6",
+    "@types/express": "^4.17.2",
+    "@types/helmet": "0.0.45",
+    "@types/node": "^13.7.6",
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.8.2",
+    "webpack": "^4.41.6",
+    "webpack-cli": "^3.3.11",
+    "webpack-node-externals": "^1.7.2"
   }
 }
