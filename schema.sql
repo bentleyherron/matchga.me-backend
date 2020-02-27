@@ -71,7 +71,7 @@ create table events (
     description text,
     photo text,
     is_public boolean,
-    event_occured date
+    event_occured_on date
 );
 
 create table event_teams (
