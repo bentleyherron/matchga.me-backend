@@ -16,7 +16,7 @@ const events: Events = {
         winner_id: 2,
         date: new Date(),
         description: 'This is the first event.',
-        photo: 'photo',
+        photo: null,
         is_public: true,
         event_occured_on: new Date()
     },
@@ -30,7 +30,7 @@ const events: Events = {
         winner_id: 5,
         date: new Date(),
         description: 'This is the second event.',
-        photo: 'photo',
+        photo: null,
         is_public: false,
         event_occured_on: new Date()
     },
@@ -44,7 +44,7 @@ const events: Events = {
         winner_id: 9,
         date: new Date(),
         description: 'This is the third event.',
-        photo: 'photo',
+        photo: null,
         is_public: true,
         event_occured_on: new Date()
     }

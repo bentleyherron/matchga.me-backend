@@ -8,7 +8,7 @@ export interface Event {
     winner_id: number;
     date: Date;
     description: string;
-    photo: string;
+    photo: any;
     is_public: boolean;
     event_occured_on: Date;
 };

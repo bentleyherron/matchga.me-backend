@@ -44,7 +44,8 @@ create table team (
     region_id integer references region(id),
     rating float,
     photo text,
-    captain_id integer references users(id)
+    captain_id integer references users(id),
+    creation_date date
 );
 
 create table team_players (
