@@ -1,39 +1,6 @@
-import {
-    User
-} from "./user.interface";
-import {
-    Users
-} from "./users.interface";
-
-const users: Users = {
-    1: {
-        id: 1,
-        username: 'user_1',
-        password: 'password',
-        joined_date: new Date(),
-        last_logged_in: new Date(),
-        player_rating: 5,
-        photo: null
-    },
-    2: {
-        id: 2,
-        username: 'user_2',
-        password: 'password',
-        joined_date: new Date(),
-        last_logged_in: new Date(),
-        player_rating: 4,
-        photo: null
-    },
-    3: {
-        id: 3,
-        username: 'user_3',
-        password: 'password',
-        joined_date: new Date(),
-        last_logged_in: new Date(),
-        player_rating: 3,
-        photo: null
-    }
-};
+import { User } from "./user.interface";
+import { Users } from "./users.interface";
+import { db } from '../db/connect';
 
 /**
  * Service Methods
@@ -41,34 +8,56 @@ const users: Users = {
 
 // Find all users
 export const findAll = async (): Promise < Users > => {
-    return users;
+    try {
+        const users = await db.any(`select * from users;`);
+        return users;
+    } catch (err) {
+        console.log(err)
+        return [];
+    }
 };
 
 // Find a single user
 export const find = async (id: number): Promise < User > => {
-    const record: User = users[id];
+    try {
+        const record: User = await db.one(`select * from users where id=$1;`, [id]);
 
-    if (record) {
-        return record;
-    };
+        if (record) {
+            return record;
+        };
 
+    } catch (err) {
+        console.log(err)
+    }
+    
     throw new Error("No record found");
 };
 
 // Create a user
 export const create = async (newUser: User): Promise < void > => {
-    const id = new Date().valueOf();
-    users[id] = {
-        ...newUser,
-        id
-    };
+    try {
+        const result: any = await db.one(`insert into users (username, email, password, joined_date, player_rating, photo) 
+                                            values ($1, $2, $3, $4, $5, $6) 
+                                        returning id`, 
+                                    [newUser.username, newUser.email, newUser.password, new Date(), 5, newUser.photo])
+        if (result) {
+            return result;
+        };
+    } catch (err) {
+        console.log(err)
+    }
 };
 
 // Update a user
 export const update = async (updatedUser: User): Promise < void > => {
-    if (users[updatedUser.id]) {
-        users[updatedUser.id] = updatedUser;
-        return;
+    try {
+        const result: any = await db.result(`update users set username=$1, email=$2, password=$3, photo=$4 where id=$5`, 
+                                            [updatedUser.username, updatedUser.email, updatedUser.password, updatedUser.photo, updatedUser.id])
+        if (result) {
+            return result;
+        };
+    } catch (err) {
+        console.log(err)
     }
 
     throw new Error("No record found to update");
@@ -76,11 +65,13 @@ export const update = async (updatedUser: User): Promise < void > => {
 
 // Removes a user
 export const remove = async (id: number): Promise < void > => {
-    const record: User = users[id];
-
-    if (record) {
-        delete users[id];
-        return;
+    try {
+        const record: any = await db.result(`delete from users where id=$1`, [id])
+        if (record) {
+            return record;
+        };
+    } catch (err) {
+        console.log(err)
     }
 
     throw new Error("No record found to delete");
