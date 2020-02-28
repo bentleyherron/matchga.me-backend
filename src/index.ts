@@ -26,7 +26,7 @@ app.use(express.json());
 
 // Routing
 app.use("/users", usersRouter);
-app.use("/events", usersRouter);
+app.use("/events", eventsRouter);
 
 // Error Handling and 404
 app.use(errorHandler);
