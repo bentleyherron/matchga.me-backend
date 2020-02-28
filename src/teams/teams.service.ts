@@ -1,36 +1,6 @@
-import {
-    Team
-} from "./team.interface";
-import {
-    Teams
-} from "./teams.interface";
-
-const teams: Teams = {
-    1: {
-        id: 1,
-        name: 'Team 1',
-        region_id: 1,
-        rating: 4,
-        photo: null,
-        creation_date: new Date()
-    },
-    2: {
-        id: 2,
-        name: 'Team 2',
-        region_id: 8,
-        rating: 2,
-        photo: null,
-        creation_date: new Date()
-    },
-    3: {
-        id: 3,
-        name: 'Team 3',
-        region_id: 123,
-        rating: 1,
-        photo: null,
-        creation_date: new Date()
-    }
-};
+import { Team } from "./team.interface";
+import { Teams } from "./teams.interface";
+import { db } from '../db/connect';
 
 /**
  * Service Methods
@@ -38,34 +8,56 @@ const teams: Teams = {
 
 // Find all teams
 export const findAll = async (): Promise < Teams > => {
-    return teams;
+    try {
+        const teams = await db.any(`select * from teams;`);
+        return teams;
+    } catch (err) {
+        console.log(err)
+        return [];
+    }
 };
 
 // Find a single team
 export const find = async (id: number): Promise < Team > => {
-    const record: Team = teams[id];
+    try {
+        const record: Team = await db.one(`select * from teams where id=$1;`, [id]);
 
-    if (record) {
-        return record;
-    };
+        if (record) {
+            return record;
+        };
+
+    } catch (err) {
+        console.log(err)
+    }
 
     throw new Error("No record found");
 };
 
 // Create a team
 export const create = async (newTeam: Team): Promise < void > => {
-    const id = new Date().valueOf();
-    teams[id] = {
-        ...newTeam,
-        id
-    };
+    try {
+        const result: any = await db.one(`insert into teams (name, region_id, rating, photo, captain_id, creation_date, is_solo) 
+                                            values ($1, $2, $3, $4, $5, $6, $7) 
+                                        returning id`, 
+                                    [newTeam.name, newTeam.region_id, 5, newTeam.photo, newTeam.captain_id, new Date(), newTeam.is_solo || false])
+        if (result) {
+            return result;
+        };
+    } catch (err) {
+        console.log(err)
+    }
 };
 
 // Update a team
 export const update = async (updatedTeam: Team): Promise < void > => {
-    if (teams[updatedTeam.id]) {
-        teams[updatedTeam.id] = updatedTeam;
-        return;
+    try {
+        const result: any = await db.result(`update teams set name=$1, region_id=$2, photo=$3, photo=$4 where id=$5`, 
+                                            [updatedTeam.name, updatedTeam.region_id, updatedTeam.photo, updatedTeam.id])
+        if (result) {
+            return result;
+        };
+    } catch (err) {
+        console.log(err)
     }
 
     throw new Error("No record found to update");
@@ -73,11 +65,13 @@ export const update = async (updatedTeam: Team): Promise < void > => {
 
 // Removes a team
 export const remove = async (id: number): Promise < void > => {
-    const record: Team = teams[id];
-
-    if (record) {
-        delete teams[id];
-        return;
+    try {
+        const record: any = await db.result(`delete from teams where id=$1`, [id])
+        if (record) {
+            return record;
+        };
+    } catch (err) {
+        console.log(err)
     }
 
     throw new Error("No record found to delete");

@@ -1,14 +1,10 @@
-import express, {
-    Request,
-    Response
-} from "express";
+import express, { Request, Response } from "express";
 import * as UserService from "./users.service";
-import {
-    User
-} from "./user.interface";
-import {
-    Users
-} from "./users.interface";
+import { User } from "./user.interface";
+import { Users } from "./users.interface";
+
+import * as TeamService from "../teams/teams.service";
+import { Team } from "../teams/team.interface";
 
 export const usersRouter = express.Router();
 
@@ -39,7 +35,21 @@ usersRouter.get("/:id", async (req: Request, res: Response) => {
 usersRouter.post("/", async (req: Request, res: Response) => {
     try {
         const user: User = req.body.user;
-        await UserService.create(user);
+        const userCreated: any = await UserService.create(user);
+        if (userCreated) {
+            const userInfo: User = await UserService.find(userCreated.id);
+            const teamInfo: Team = {
+                id: 0o0,
+                name: userInfo.username,
+                region_id: userInfo.region_id,
+                captain_id: userInfo.id,
+                photo: null,
+                creation_date: userInfo.joined_date,
+                rating: 0o0,
+                is_solo: true
+            }
+            await TeamService.create(teamInfo);
+        };
         res.sendStatus(201);
     } catch (e) {
         res.status(404).send(e.message);

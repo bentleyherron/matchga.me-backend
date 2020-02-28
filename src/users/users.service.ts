@@ -36,10 +36,10 @@ export const find = async (id: number): Promise < User > => {
 // Create a user
 export const create = async (newUser: User): Promise < void > => {
     try {
-        const result: any = await db.one(`insert into users (username, email, password, joined_date, player_rating, photo) 
-                                            values ($1, $2, $3, $4, $5, $6) 
+        const result: any = await db.one(`insert into users (username, email, password, region_id, joined_date, player_rating, photo) 
+                                            values ($1, $2, $3, $4, $5, $6, $7) 
                                         returning id`, 
-                                    [newUser.username, newUser.email, newUser.password, new Date(), 5, newUser.photo])
+                                    [newUser.username, newUser.email, newUser.password, newUser.region_id, new Date(), 5, newUser.photo])
         if (result) {
             return result;
         };
