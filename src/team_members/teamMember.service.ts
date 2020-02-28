@@ -13,8 +13,9 @@ export const findAllPlayerTeams = async (player_id: number): Promise < TeamMembe
         return teams;
     } catch (err) {
         console.log(err)
-        return [];
     }
+
+    throw new Error("No teams found for that player");
 };
 
 // Find all members of a single team
@@ -24,8 +25,9 @@ export const findAllTeamMembers = async (team_id: number): Promise < TeamMembers
         return teams;
     } catch (err) {
         console.log(err)
-        return [];
     }
+
+    throw new Error("No player found to for that team");
 };
 
 // Create a team member
