@@ -1,14 +1,7 @@
-import express, {
-    Request,
-    Response
-} from "express";
+import express, { Request, Response } from "express";
 import * as TeamService from "./teams.service";
-import {
-    Team
-} from "./team.interface";
-import {
-    Teams
-} from "./teams.interface";
+import { Team } from "./team.interface";
+import { Teams } from "./teams.interface";
 
 export const teamsRouter = express.Router();
 

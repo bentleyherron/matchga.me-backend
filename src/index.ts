@@ -6,6 +6,8 @@ import helmet from "helmet";
 // Routing and Handlers
 import { usersRouter } from "./users/users.router";
 import { eventsRouter } from "./events/events.router";
+import { teamsRouter } from "./teams/teams.router";
+import { teamMembersRouter } from './team_members/teamMembers.router';
 import { errorHandler } from "./middleware/error.middleware";
 import { notFoundHandler } from "./middleware/notFound.middleware";
 
@@ -27,6 +29,8 @@ app.use(express.json());
 // Routing
 app.use("/users", usersRouter);
 app.use("/events", eventsRouter);
+app.use("/teams", teamsRouter);
+app.use("/team-members", teamMembersRouter);
 
 // Error Handling and 404
 app.use(errorHandler);

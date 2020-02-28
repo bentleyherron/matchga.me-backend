@@ -5,6 +5,7 @@ import { Users } from "./users.interface";
 
 import * as TeamService from "../teams/teams.service";
 import { Team } from "../teams/team.interface";
+import { createUserTeam, addUserToTheirTeam } from "../utils/helpers";
 
 export const usersRouter = express.Router();
 
@@ -37,18 +38,8 @@ usersRouter.post("/", async (req: Request, res: Response) => {
         const user: User = req.body.user;
         const userCreated: any = await UserService.create(user);
         if (userCreated) {
-            const userInfo: User = await UserService.find(userCreated.id);
-            const teamInfo: Team = {
-                id: 0o0,
-                name: userInfo.username,
-                region_id: userInfo.region_id,
-                captain_id: userInfo.id,
-                photo: null,
-                creation_date: userInfo.joined_date,
-                rating: 0o0,
-                is_solo: true
-            }
-            await TeamService.create(teamInfo);
+            const teamCreated: object = await createUserTeam(userCreated);
+            const teamLinked: object = await addUserToTheirTeam(userCreated, teamCreated)
         };
         res.sendStatus(201);
     } catch (e) {
