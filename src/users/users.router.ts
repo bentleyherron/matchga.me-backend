@@ -3,8 +3,6 @@ import * as UserService from "./users.service";
 import { User } from "./user.interface";
 import { Users } from "./users.interface";
 
-import * as TeamService from "../teams/teams.service";
-import { Team } from "../teams/team.interface";
 import { createUserTeam, addUserToTheirTeam } from "../utils/helpers";
 
 export const usersRouter = express.Router();
