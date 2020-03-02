@@ -17,7 +17,7 @@ teamMembersRouter.get("/player/:id", async (req: Request, res: Response) => {
     }
 });
 
-// GET team-members/:id (Find all players that are members of a team)
+// GET team-members/team/:id (Find all players that are members of a team)
 teamMembersRouter.get("/team/:id", async (req: Request, res: Response) => {
     const team_id: number = parseInt(req.params.id, 10);
     try {
@@ -39,11 +39,11 @@ teamMembersRouter.post("/", async (req: Request, res: Response) => {
     }
 });
 
-// DELETE teams/:id
+// DELETE team-members/:id
 teamMembersRouter.delete("/:id", async (req: Request, res: Response) => {
     try {
-        const player_id: number = parseInt(req.params.id, 10);
-        const team_id: number = parseInt(req.params.id, 10);
+        const player_id: number = parseInt(req.params.player_id, 10);
+        const team_id: number = parseInt(req.params.team_id, 10);
         await TeamMemberService.remove(player_id, team_id);
         res.sendStatus(200);
     } catch (e) {
