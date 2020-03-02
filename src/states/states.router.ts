@@ -1,8 +1,6 @@
 import express, { Request, Response } from "express";
 import * as StateService from "./states.service";
-// import { State } from "./state.interface";
 import { States } from "./states.interface";
-// import { City } from "./city.interface";
 import { Cities } from "./cities.interface";
 
 export const statesRouter = express.Router();
