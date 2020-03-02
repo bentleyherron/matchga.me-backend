@@ -31,6 +31,16 @@ usersRouter.get("/:id", async (req: Request, res: Response) => {
     }
 });
 
+// POST users/check
+usersRouter.post("/check", async (req: Request, res: Response) => {
+    try {
+        const user: User = req.body.user;
+        const userExistsInfo: any = await UserService.checkUser(user);
+        res.status(200).send(userExistsInfo);
+    } catch (e) {
+        res.status(404).send(e.message);
+    }
+});
 
 // POST users/
 usersRouter.post("/", async (req: Request, res: Response) => {

@@ -34,6 +34,34 @@ export const find = async (id: number): Promise < User > => {
     throw new Error("No user record found");
 };
 
+// Check if a user exists
+export const checkUser = async (user: User): Promise < User > => {
+    try {
+        const usernameExists: any = await db.result(`select exists(select 1 from users where username=$1)`, [user.username]);
+        const emailExists: any = await db.result(`select exists(select 1 from users where email=$1)`, [user.email]);
+        const result: any = {usernameFound: false, emailFound: false}
+
+        if (usernameExists.rows[0].exists == true && emailExists.rows[0].exists == true) {
+            result.usernameFound = true;
+            result.emailFound = true;
+            return result;
+        } else if (usernameExists.rows[0].exists == true && emailExists.rows[0].exists == false) {
+            result.usernameFound = true;
+            return result;
+        } else if (usernameExists.rows[0].exists == false && emailExists.rows[0].exists == true) {
+            result.emailFound = true;
+            return result;
+        } else {
+            return result;
+        }
+
+    } catch (err) {
+        console.log(err)
+    }
+    
+    throw new Error("No user record found");
+};
+
 // Create a user
 export const create = async (newUser: User): Promise < void > => {
     try {
@@ -52,8 +80,8 @@ export const create = async (newUser: User): Promise < void > => {
 // Update a user
 export const update = async (updatedUser: User): Promise < void > => {
     try {
-        const result: any = await db.result(`update users set username=$1, email=$2, password=$3, photo=$4 where id=$5`, 
-                                            [updatedUser.username, updatedUser.email, updatedUser.password, updatedUser.photo, updatedUser.id])
+        const result: any = await db.result(`update users set username=$1, email=$2, password=$3, region_id=$4, player_rating=$5, photo=$6 where id=$7`, 
+                        [updatedUser.username, updatedUser.email, updatedUser.password, updatedUser.region_id, updatedUser.player_rating,updatedUser.photo, updatedUser.id])
         if (result) {
             return result;
         };
