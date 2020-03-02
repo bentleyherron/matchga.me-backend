@@ -20,9 +20,9 @@ usersRouter.get("/", async (req: Request, res: Response) => {
 
 // GET users/:id
 usersRouter.get("/:id", async (req: Request, res: Response) => {
-    const id: number = parseInt(req.params.id, 10);
+    const userId: number = parseInt(req.params.id, 10);
     try {
-        const user: User = await UserService.find(id);
+        const user: User = await UserService.find(userId);
         res.status(200).send(user);
     } catch (e) {
         res.status(404).send(e.message);
@@ -69,8 +69,8 @@ usersRouter.put("/", async (req: Request, res: Response) => {
 // DELETE users/:id
 usersRouter.delete("/:id", async (req: Request, res: Response) => {
     try {
-        const id: number = parseInt(req.params.id, 10);
-        await UserService.remove(id);
+        const userId: number = parseInt(req.params.id, 10);
+        await UserService.remove(userId);
         res.sendStatus(200);
     } catch (e) {
         res.status(500).send(e.message);
