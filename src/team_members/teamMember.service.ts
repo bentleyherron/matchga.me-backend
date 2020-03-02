@@ -27,7 +27,7 @@ export const findAllTeamMembers = async (team_id: number): Promise < TeamMembers
         console.log(err)
     }
 
-    throw new Error("No player found to for that team");
+    throw new Error("No player found for that team");
 };
 
 // Create a team member

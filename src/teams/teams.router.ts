@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import * as TeamService from "./teams.service";
 import { Team } from "./team.interface";
 import { Teams } from "./teams.interface";
+import { addUserToTheirTeam } from "../utils/helpers";
 
 export const teamsRouter = express.Router();
 
@@ -32,7 +33,11 @@ teamsRouter.get("/:id", async (req: Request, res: Response) => {
 teamsRouter.post("/", async (req: Request, res: Response) => {
     try {
         const team: Team = req.body.team;
-        await TeamService.create(team);
+        const createdTeamId: any = await TeamService.create(team);
+        if (createdTeamId) {
+            const captainIdtoUserId: object = {id: team.captain_id}
+            const userAddedToTeam: any = await addUserToTheirTeam(captainIdtoUserId, createdTeamId);
+        }
         res.sendStatus(201);
     } catch (e) {
         res.status(404).send(e.message);

@@ -13,8 +13,9 @@ export const findAll = async (): Promise < Users > => {
         return users;
     } catch (err) {
         console.log(err)
-        return [];
     }
+
+    throw new Error("No user records found");
 };
 
 // Find a single user
@@ -30,7 +31,7 @@ export const find = async (id: number): Promise < User > => {
         console.log(err)
     }
     
-    throw new Error("No record found");
+    throw new Error("No user record found");
 };
 
 // Create a user
