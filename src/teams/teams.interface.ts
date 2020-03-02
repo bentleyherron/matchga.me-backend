@@ -1,6 +1,4 @@
-import {
-  Team
-} from "./team.interface";
+import { Team } from "./team.interface";
 
 export interface Teams {
   [key: number]: Team;

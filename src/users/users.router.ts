@@ -1,14 +1,11 @@
-import express, {
-    Request,
-    Response
-} from "express";
+import express, { Request, Response } from "express";
 import * as UserService from "./users.service";
-import {
-    User
-} from "./user.interface";
-import {
-    Users
-} from "./users.interface";
+import { User } from "./user.interface";
+import { Users } from "./users.interface";
+
+import * as TeamService from "../teams/teams.service";
+import { Team } from "../teams/team.interface";
+import { createUserTeam, addUserToTheirTeam } from "../utils/helpers";
 
 export const usersRouter = express.Router();
 
@@ -39,7 +36,11 @@ usersRouter.get("/:id", async (req: Request, res: Response) => {
 usersRouter.post("/", async (req: Request, res: Response) => {
     try {
         const user: User = req.body.user;
-        await UserService.create(user);
+        const userCreated: any = await UserService.create(user);
+        if (userCreated) {
+            const teamCreated: object = await createUserTeam(userCreated);
+            const teamLinked: object = await addUserToTheirTeam(userCreated, teamCreated)
+        };
         res.sendStatus(201);
     } catch (e) {
         res.status(404).send(e.message);

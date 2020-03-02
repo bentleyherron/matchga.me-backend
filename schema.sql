@@ -23,7 +23,8 @@ CREATE TABLE us_cities (
 	CITY varchar(50) NOT NULL,
 	COUNTY varchar(50) NOT NULL,
 	LATITUDE float NOT NULL,
-	LONGITUDE float NOT NULL
+	LONGITUDE float NOT NULL,
+    PRIMARY KEY (ID)
 );
 
 create table users (
@@ -31,6 +32,7 @@ create table users (
     username text,
     email text,
     password text,
+    region_id integer references us_cities(id),
     joined_date date,
     last_logged_in date,
     player_rating float,
@@ -38,26 +40,27 @@ create table users (
     photo text
 );
 
-create table team (
+create table teams (
     id serial primary key,
     name text,
-    region_id integer references region(id),
+    region_id integer references us_cities(id),
+    captain_id integer references users(id),
     rating float,
     photo text,
-    captain_id integer references users(id),
-    creation_date date
+    creation_date date,
+    is_solo boolean
 );
 
-create table team_players (
+create table team_members (
     player_id integer references users(id),
-    team_id integer references team(id)
+    team_id integer references teams(id)
 );
 
 create table favorite_sports (
     id serial primary key,
     sport_id integer references sports(id),
     user_id integer references users(id),
-    team_id integer references team(id)
+    team_id integer references teams(id)
 );
 
 create table events (
@@ -67,7 +70,7 @@ create table events (
     sport_id integer references sports(id),
     longitude float,
     latitude float,
-    winner_id integer references team(id),
+    winner_id integer references teams(id),
     date date,
     description text,
     photo text,
@@ -78,18 +81,18 @@ create table events (
 create table event_teams (
     id serial primary key,
     event_id integer references events(id),
-    team_id integer references team(id)
+    team_id integer references teams(id)
 );
 
 create table scores (
-    team_id integer references team(id),
+    team_id integer references teams(id),
     event_id integer references events(id),
     score integer
 );
 
 create table challenges (
-    team_from_id integer references team(id),
-    team_to_id integer references team(id),
+    team_from_id integer references teams(id),
+    team_to_id integer references teams(id),
     datetime date,
     message text,
     wager integer,
