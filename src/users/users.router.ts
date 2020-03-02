@@ -3,8 +3,6 @@ import * as UserService from "./users.service";
 import { User } from "./user.interface";
 import { Users } from "./users.interface";
 
-import * as TeamService from "../teams/teams.service";
-import { Team } from "../teams/team.interface";
 import { createUserTeam, addUserToTheirTeam } from "../utils/helpers";
 
 export const usersRouter = express.Router();
@@ -31,6 +29,16 @@ usersRouter.get("/:id", async (req: Request, res: Response) => {
     }
 });
 
+// POST users/check
+usersRouter.post("/check", async (req: Request, res: Response) => {
+    try {
+        const user: User = req.body.user;
+        const userExistsInfo: any = await UserService.checkUser(user);
+        res.status(200).send(userExistsInfo);
+    } catch (e) {
+        res.status(404).send(e.message);
+    }
+});
 
 // POST users/
 usersRouter.post("/", async (req: Request, res: Response) => {

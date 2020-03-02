@@ -7,9 +7,9 @@ import { db } from '../db/connect';
  */
 
 // Find all teams a player is a member of
-export const findAllPlayerSports = async (player_id: number): Promise < FavoriteSports > => {
+export const findAllPlayerSports = async (user_id: number): Promise < FavoriteSports > => {
     try {
-        const sports: any = await db.any(`select * from favorite_sports where player_id=$1;`, [player_id]);
+        const sports: any = await db.any(`select * from favorite_sports where user_id=$1;`, [user_id]);
         return sports;
     } catch (err) {
         console.log(err)
