@@ -32,11 +32,11 @@ create table users (
     username text,
     email text,
     password text,
+    nickname text,
     region_id integer references us_cities(id),
     joined_date date,
     last_logged_in date,
     player_rating float,
-    -- favorite_sports integer references sports(id),
     photo text
 );
 
@@ -45,6 +45,7 @@ create table teams (
     name text,
     region_id integer references us_cities(id),
     captain_id integer references users(id),
+    sport_id integer references sports(id),
     rating float,
     photo text,
     creation_date date,
@@ -93,6 +94,8 @@ create table scores (
 create table challenges (
     team_from_id integer references teams(id),
     team_to_id integer references teams(id),
+    region_id integer references region(id),
+    sport_id integer references sports(id),
     datetime date,
     message text,
     wager integer,
