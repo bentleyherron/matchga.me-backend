@@ -9,7 +9,7 @@ import { db } from '../db/connect';
 // Find all users
 export const findAll = async (): Promise < Users > => {
     try {
-        const users = await db.any(`select * from users;`);
+        const users: Users = await db.any(`select * from users;`);
         return users;
     } catch (err) {
         console.log(err)
@@ -65,10 +65,10 @@ export const checkUser = async (user: User): Promise < User > => {
 // Create a user
 export const create = async (newUser: User): Promise < void > => {
     try {
-        const result: any = await db.one(`insert into users (username, email, password, region_id, joined_date, player_rating, photo) 
+        const result: any = await db.one(`insert into users (username, email, password, city_id, joined_date, player_rating, photo) 
                                             values ($1, $2, $3, $4, $5, $6, $7) 
                                         returning id`, 
-                                    [newUser.username, newUser.email, newUser.password, newUser.region_id, new Date(), 5, newUser.photo])
+                                    [newUser.username, newUser.email, newUser.password, newUser.city_id, new Date(), 5, newUser.photo])
         if (result) {
             return result;
         };
@@ -80,8 +80,8 @@ export const create = async (newUser: User): Promise < void > => {
 // Update a user
 export const update = async (updatedUser: User): Promise < void > => {
     try {
-        const result: any = await db.result(`update users set username=$1, email=$2, password=$3, region_id=$4, player_rating=$5, photo=$6 where id=$7`, 
-                        [updatedUser.username, updatedUser.email, updatedUser.password, updatedUser.region_id, updatedUser.player_rating,updatedUser.photo, updatedUser.id])
+        const result: any = await db.result(`update users set username=$1, email=$2, password=$3, city_id=$4, player_rating=$5, photo=$6 where id=$7`, 
+                        [updatedUser.username, updatedUser.email, updatedUser.password, updatedUser.city_id, updatedUser.player_rating,updatedUser.photo, updatedUser.id])
         if (result) {
             return result;
         };

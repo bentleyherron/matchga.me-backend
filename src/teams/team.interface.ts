@@ -1,7 +1,7 @@
 export interface Team {
     id: number;
     name: string;
-    region_id: number;
+    city_id: number;
     rating: number;
     photo: any;
     captain_id: number;

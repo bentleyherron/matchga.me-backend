@@ -3,12 +3,12 @@ create table sports (
     name text
 );
 
-create table region (
-    id serial primary key,
-    city text,
-    latitude float,
-    longitude float
-);
+-- create table region (
+--     id serial primary key,
+--     city text,
+--     latitude float,
+--     longitude float
+-- );
 
 CREATE TABLE us_states (
 	id integer,
@@ -33,7 +33,7 @@ create table users (
     email text,
     password text,
     nickname text,
-    region_id integer references us_cities(id),
+    city_id integer references us_cities(id),
     joined_date date,
     last_logged_in date,
     player_rating float,
@@ -43,7 +43,7 @@ create table users (
 create table teams (
     id serial primary key,
     name text,
-    region_id integer references us_cities(id),
+    city_id integer references us_cities(id),
     captain_id integer references users(id),
     sport_id integer references sports(id),
     rating float,
@@ -67,7 +67,7 @@ create table favorite_sports (
 create table events (
     id serial primary key,
     title text,
-    region_id integer references region(id),
+    city_id integer references us_cities(id),
     sport_id integer references sports(id),
     longitude float,
     latitude float,
@@ -94,7 +94,7 @@ create table scores (
 create table challenges (
     team_from_id integer references teams(id),
     team_to_id integer references teams(id),
-    region_id integer references region(id),
+    city_id integer references us_cities(id),
     sport_id integer references sports(id),
     datetime date,
     message text,

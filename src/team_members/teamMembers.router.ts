@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import * as TeamMemberService from "./teamMember.service";
+import * as TeamMemberService from "./teamMembers.service";
 import { TeamMember } from "./teamMember.interface";
 import { TeamMembers } from "./teamMembers.interface";
 

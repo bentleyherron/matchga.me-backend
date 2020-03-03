@@ -1,54 +1,7 @@
-import {
-    Event
-} from "./event.interface";
-import {
-    Events
-} from "./events.interface";
+import { Event } from "./event.interface";
+import { Events } from "./events.interface";
+import { db } from '../db/connect';
 
-const events: Events = {
-    1: {
-        id: 1,
-        title: 'Event 1',
-        region_id: 1,
-        sport_id: 8,
-        longitude: 33.749788,
-        latitude: -84.31685,
-        winner_id: 2,
-        date: new Date(),
-        description: 'This is the first event.',
-        photo: null,
-        is_public: true,
-        event_occured_on: new Date()
-    },
-    2: {
-        id: 2,
-        title: 'Event 2',
-        region_id: 3,
-        sport_id: 3,
-        longitude: 33.749788,
-        latitude: -84.31685,
-        winner_id: 5,
-        date: new Date(),
-        description: 'This is the second event.',
-        photo: null,
-        is_public: false,
-        event_occured_on: new Date()
-    },
-    3: {
-        id: 3,
-        title: 'Event 3',
-        region_id: 5,
-        sport_id: 13,
-        longitude: 33.749788,
-        latitude: -84.31685,
-        winner_id: 9,
-        date: new Date(),
-        description: 'This is the third event.',
-        photo: null,
-        is_public: true,
-        event_occured_on: new Date()
-    }
-};
 
 /**
  * Service Methods
@@ -56,46 +9,70 @@ const events: Events = {
 
 // Find all events
 export const findAll = async (): Promise < Events > => {
-    return events;
+    try {
+        const events: Events = await db.any(`select * from events;`);
+        return events;
+    } catch (err) {
+        console.log(err)
+        return [];
+    }
 };
 
 // Find a single event
-export const find = async (id: number): Promise < Event > => {
-    const record: Event = events[id];
+export const find = async (eventId: number): Promise < Event > => {
+    try {
+        const event: Event = await db.one(`select * from events where id=$1;`, [eventId]);
 
-    if (record) {
-        return record;
-    };
+        if (event) {
+            return event;
+        };
+
+    } catch (err) {
+        console.log(err)
+    }
 
     throw new Error("No record found");
 };
 
 // Create an event
 export const create = async (newEvent: Event): Promise < void > => {
-    const id = new Date().valueOf();
-    events[id] = {
-        ...newEvent,
-        id
-    };
+    try {
+        const result: any = await db.one(`insert into events (title, city_id, sport_id, longitude, latitude, date, description, photo, is_public, event_occured_on) 
+                                            values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) 
+                                        returning id`, 
+                                    [newEvent.title, newEvent.city_id, newEvent.sport_id, newEvent.longitude, newEvent.latitude, newEvent.date, newEvent.description, newEvent.photo, newEvent.is_public || true, newEvent.event_occured_on])
+        if (result) {
+            return result;
+        };
+    } catch (err) {
+        console.log(err)
+    }
 };
 
 // Update an event
 export const update = async (updatedEvent: Event): Promise < void > => {
-    if (events[updatedEvent.id]) {
-        events[updatedEvent.id] = updatedEvent;
-        return;
+    try {
+        const result: any = await db.result(`update events set title=$1, city_id=$2, sport_id=$3, longitude=$4, latitude=$5, date=$6, description=$7, photo=$8, is_public=$9, event_occured_on=$10 where id=$11`, 
+                                    [updatedEvent.title, updatedEvent.city_id, updatedEvent.sport_id, updatedEvent.longitude, updatedEvent.latitude, updatedEvent.date, updatedEvent.description, updatedEvent.photo, updatedEvent.is_public, updatedEvent.event_occured_on])
+        if (result) {
+            return result;
+        };
+    } catch (err) {
+        console.log(err)
     }
 
     throw new Error("No record found to update");
 };
 
 // Removes an event
-export const remove = async (id: number): Promise < void > => {
-    const record: Event = events[id];
-
-    if (record) {
-        delete events[id];
-        return;
+export const remove = async (eventId: number): Promise < void > => {
+    try {
+        const record: any = await db.result(`delete from events where id=$1`, [eventId])
+        if (record) {
+            return record;
+        };
+    } catch (err) {
+        console.log(err)
     }
 
     throw new Error("No record found to delete");

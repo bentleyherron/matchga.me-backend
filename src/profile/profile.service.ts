@@ -1,5 +1,5 @@
 import { Profile } from "./profile.interface";
-import { db } from '../db/connect';
+// import { db } from '../db/connect';
 
 import * as UserService from "../users/users.service";
 import { User } from "../users/user.interface";
@@ -7,7 +7,7 @@ import { User } from "../users/user.interface";
 import * as FavoriteSportService from "../favorite_sports/favoriteSports.service";
 import { FavoriteSports } from "../favorite_sports/favoriteSports.interface";
 
-import * as TeamMemberService from "../team_members/teamMember.service";
+import * as TeamMemberService from "../team_members/teamMembers.service";
 import { TeamMembers } from "../team_members/teamMembers.interface";
 
 
