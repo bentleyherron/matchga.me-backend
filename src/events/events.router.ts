@@ -32,8 +32,8 @@ eventsRouter.get("/:id", async (req: Request, res: Response) => {
 eventsRouter.post("/", async (req: Request, res: Response) => {
     try {
         const event: Event = req.body.event;
-        await EventService.create(event);
-        res.sendStatus(201);
+        const createdEvent: any = await EventService.create(event);
+        res.status(201).send(createdEvent);
     } catch (e) {
         res.status(404).send(e.message);
     }
@@ -43,8 +43,8 @@ eventsRouter.post("/", async (req: Request, res: Response) => {
 eventsRouter.put("/", async (req: Request, res: Response) => {
     try {
         const event: Event = req.body.event;
-        await EventService.update(event);
-        res.sendStatus(200);
+        const updatedEvent: any = await EventService.update(event);
+        res.status(200).send(updatedEvent);
     } catch (e) {
         res.status(500).send(e.message);
     }

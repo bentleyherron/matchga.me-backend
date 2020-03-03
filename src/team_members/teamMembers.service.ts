@@ -33,7 +33,7 @@ export const findAllTeamMembers = async (team_id: number): Promise < TeamMembers
 // Create a team member
 export const create = async (newTeamMember: TeamMember): Promise < void > => {
     try {
-        const result: any = await db.one(`insert into team_members (player_id, team_id) values ($1, $2) returning player_id`, 
+        const result: any = await db.one(`insert into team_members (player_id, team_id) values ($1, $2) returning *`, 
                                     [newTeamMember.player_id, newTeamMember.team_id])
         if (result) {
             return result;

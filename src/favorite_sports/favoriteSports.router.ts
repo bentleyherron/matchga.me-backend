@@ -3,11 +3,11 @@ import * as FavoriteSportService from "./favoriteSports.service";
 import { FavoriteSport } from "./favoriteSport.interface";
 import { FavoriteSports } from "./favoriteSports.interface";
 
-export const FavoriteSportsRouter = express.Router();
+export const favoriteSportsRouter = express.Router();
 
 
 // GET favorite-sports/player/:id (Find all favorite sports for a player)
-FavoriteSportsRouter.get("/player/:id", async (req: Request, res: Response) => {
+favoriteSportsRouter.get("/player/:id", async (req: Request, res: Response) => {
     const playerId: number = parseInt(req.params.id, 10);
     try {
         const sports: FavoriteSports = await FavoriteSportService.findAllPlayerSports(playerId);
@@ -18,7 +18,7 @@ FavoriteSportsRouter.get("/player/:id", async (req: Request, res: Response) => {
 });
 
 // GET favorite-sports/team/:id (Find all players that are members of a team)
-FavoriteSportsRouter.get("/team/:id", async (req: Request, res: Response) => {
+favoriteSportsRouter.get("/team/:id", async (req: Request, res: Response) => {
     const teamId: number = parseInt(req.params.id, 10);
     try {
         const sports: FavoriteSports = await FavoriteSportService.findAllTeamSports(teamId);
@@ -29,18 +29,18 @@ FavoriteSportsRouter.get("/team/:id", async (req: Request, res: Response) => {
 });
 
 // POST favorite-sports/
-FavoriteSportsRouter.post("/", async (req: Request, res: Response) => {
+favoriteSportsRouter.post("/", async (req: Request, res: Response) => {
     try {
-        const favoriteSport: FavoriteSport = req.body.favoriteSport;
-        await FavoriteSportService.add(favoriteSport);
-        res.sendStatus(201);
+        const sports: FavoriteSports = req.body.favoriteSports;
+        const createdFavoriteSport: any = await FavoriteSportService.add(sports);
+        res.status(201).send(createdFavoriteSport);
     } catch (e) {
         res.status(404).send(e.message);
     }
 });
 
 // DELETE favorite-sports/:id
-FavoriteSportsRouter.delete("/:id", async (req: Request, res: Response) => {
+favoriteSportsRouter.delete("/:id", async (req: Request, res: Response) => {
     try {
         const favoriteSportId: number = parseInt(req.params.id, 10);
         await FavoriteSportService.remove(favoriteSportId);

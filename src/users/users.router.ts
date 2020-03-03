@@ -49,7 +49,7 @@ usersRouter.post("/", async (req: Request, res: Response) => {
             const teamCreated: object = await createUserTeam(userCreated);
             const teamLinked: object = await addUserToTheirTeam(userCreated, teamCreated)
         };
-        res.sendStatus(201);
+        res.status(201).send(userCreated);
     } catch (e) {
         res.status(404).send(e.message);
     }
@@ -59,8 +59,8 @@ usersRouter.post("/", async (req: Request, res: Response) => {
 usersRouter.put("/", async (req: Request, res: Response) => {
     try {
         const user: User = req.body.user;
-        await UserService.update(user);
-        res.sendStatus(200);
+        const updatedUser: any = await UserService.update(user);
+        res.status(200).send(updatedUser);
     } catch (e) {
         res.status(500).send(e.message);
     }

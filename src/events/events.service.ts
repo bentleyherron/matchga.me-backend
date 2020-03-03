@@ -39,7 +39,7 @@ export const create = async (newEvent: Event): Promise < void > => {
     try {
         const result: any = await db.one(`insert into events (title, city_id, sport_id, longitude, latitude, date, description, photo, is_public, event_occured_on) 
                                             values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) 
-                                        returning id`, 
+                                        returning row`, 
                                     [newEvent.title, newEvent.city_id, newEvent.sport_id, newEvent.longitude, newEvent.latitude, newEvent.date, newEvent.description, newEvent.photo, newEvent.is_public || true, newEvent.event_occured_on])
         if (result) {
             return result;
@@ -52,7 +52,7 @@ export const create = async (newEvent: Event): Promise < void > => {
 // Update an event
 export const update = async (updatedEvent: Event): Promise < void > => {
     try {
-        const result: any = await db.result(`update events set title=$1, city_id=$2, sport_id=$3, longitude=$4, latitude=$5, date=$6, description=$7, photo=$8, is_public=$9, event_occured_on=$10 where id=$11`, 
+        const result: any = await db.result(`update events set title=$1, city_id=$2, sport_id=$3, longitude=$4, latitude=$5, date=$6, description=$7, photo=$8, is_public=$9, event_occured_on=$10 where id=$11 returning row`, 
                                     [updatedEvent.title, updatedEvent.city_id, updatedEvent.sport_id, updatedEvent.longitude, updatedEvent.latitude, updatedEvent.date, updatedEvent.description, updatedEvent.photo, updatedEvent.is_public, updatedEvent.event_occured_on])
         if (result) {
             return result;

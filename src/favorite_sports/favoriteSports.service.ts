@@ -31,10 +31,13 @@ export const findAllTeamSports = async (team_id: number): Promise < FavoriteSpor
 };
 
 // Add a favorite sport
-export const add = async (favoriteSport: FavoriteSport): Promise < void > => {
+export const add = async (favoriteSports: any): Promise < void > => {
     try {
-        const result: any = await db.one(`insert into favorite_sports (sport_id, player_id, team_id) values ($1, $2, $3) returning id`, 
-                                    [favoriteSport.sport_id, favoriteSport.user_id || null, favoriteSport.team_id || null])
+        const results: any = favoriteSports.map(async (favoriteSport: FavoriteSport) => {
+            return await db.one(`insert into favorite_sports (sport_id, user_id, team_id) values ($1, $2, $3) returning *`, 
+                                [favoriteSport.sport_id, favoriteSport.user_id || null, favoriteSport.team_id || null])
+        })
+        const result: any = Promise.all(results)
         if (result) {
             return result;
         };

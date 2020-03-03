@@ -31,9 +31,9 @@ scoresRouter.get("/:id", async (req: Request, res: Response) => {
 // POST scores/
 scoresRouter.post("/", async (req: Request, res: Response) => {
     try {
-        const scoreInfo: Score = req.body.scoreInfo;
-        await ScoreService.create(scoreInfo);
-        res.sendStatus(201);
+        const scoreInfo: Score = req.body.score;
+        const createdScore: any = await ScoreService.create(scoreInfo);
+        res.status(201).send(createdScore);
     } catch (e) {
         res.status(404).send(e.message);
     }
@@ -42,9 +42,9 @@ scoresRouter.post("/", async (req: Request, res: Response) => {
 // PUT scores/
 scoresRouter.put("/", async (req: Request, res: Response) => {
     try {
-        const updatedScore: Score = req.body.updatedScore;
-        await ScoreService.update(updatedScore);
-        res.sendStatus(200);
+        const score: Score = req.body.score;
+        const updatedScore: any = await ScoreService.update(score);
+        res.status(200).send(updatedScore);
     } catch (e) {
         res.status(500).send(e.message);
     }

@@ -3,6 +3,7 @@ export interface User {
     username: string;
     email: string;
     password: string;
+    nickname: string;
     city_id: number;
     joined_date: Date;
     last_logged_in: Date;
