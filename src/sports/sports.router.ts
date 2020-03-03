@@ -50,11 +50,11 @@ sportsRouter.put("/", async (req: Request, res: Response) => {
     }
 });
 
-// DELETE sport/
-sportsRouter.delete("/", async (req: Request, res: Response) => {
+// DELETE sport/:id
+sportsRouter.delete("/:id", async (req: Request, res: Response) => {
     try {
-        const deleteSport: Sport = req.body.sport;
-        await SportService.remove(deleteSport);
+        const sportId: number = parseInt(req.params.id, 10);
+        await SportService.remove(sportId);
         res.sendStatus(200);
     } catch (e) {
         res.status(500).send(e.message);
