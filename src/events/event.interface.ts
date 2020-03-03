@@ -1,7 +1,7 @@
 export interface Event {
     id: number;
     title: string;
-    region_id: number;
+    city_id: number;
     sport_id: number;
     longitude: number;
     latitude: number;

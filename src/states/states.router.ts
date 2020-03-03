@@ -18,9 +18,9 @@ statesRouter.get("/", async (req: Request, res: Response) => {
 
 // GET cities from in a state
 statesRouter.get("/:id", async (req: Request, res: Response) => {
-    const state_id: number = parseInt(req.params.id, 10);
+    const stateId: number = parseInt(req.params.id, 10);
     try {
-        const cities: Cities = await StateService.getAllCitiesFromState(state_id);
+        const cities: Cities = await StateService.getAllCitiesFromState(stateId);
         res.status(200).send(cities);
     } catch (e) {
         res.status(404).send(e.message);

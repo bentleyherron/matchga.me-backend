@@ -10,6 +10,7 @@ import { teamsRouter } from "./teams/teams.router";
 import { teamMembersRouter } from "./team_members/teamMembers.router";
 import { statesRouter } from "./states/states.router";
 import { profileRouter } from "./profile/profile.router";
+import { scoresRouter } from "./scores/scores.router";
 import { errorHandler } from "./middleware/error.middleware";
 import { notFoundHandler } from "./middleware/notFound.middleware";
 
@@ -35,6 +36,7 @@ app.use("/teams", teamsRouter);
 app.use("/team-members", teamMembersRouter);
 app.use("/states", statesRouter);
 app.use("/profile", profileRouter);
+app.use("/scores", scoresRouter);
 
 // Error Handling and 404
 app.use(errorHandler);
