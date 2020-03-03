@@ -2,6 +2,7 @@ import { Score } from "./score.interface";
 import { Scores } from "./scores.interface";
 import { db } from '../db/connect';
 
+
 /**
  * Service Methods
  */
@@ -51,7 +52,7 @@ export const create = async (score: Score): Promise < void > => {
     try {
         const result: any = await db.one(`insert into scores (team_id, event_id, score) 
                                             values ($1, $2, $3) 
-                                        returning row`, 
+                                        returning *`, 
                                     [score.team_id, score.event_id, score.score])
         if (result) {
             return result;
@@ -64,7 +65,7 @@ export const create = async (score: Score): Promise < void > => {
 // Update a score
 export const update = async (updatedScore: Score): Promise < void > => {
     try {
-        const result: any = await db.result(`update scores set score=$1 where event_id=$2 returning row`, 
+        const result: any = await db.result(`update scores set score=$1 where event_id=$2 returning id`, 
                         [updatedScore.score, updatedScore.event_id])
         if (result) {
             return result;

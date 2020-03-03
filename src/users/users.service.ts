@@ -80,7 +80,7 @@ export const create = async (newUser: User): Promise < void > => {
 // Update a user
 export const update = async (updatedUser: User): Promise < void > => {
     try {
-        const result: any = await db.result(`update users set username=$1, email=$2, password=$3, city_id=$4, player_rating=$5, photo=$6 where id=$7 returning row`, 
+        const result: any = await db.result(`update users set username=$1, email=$2, password=$3, city_id=$4, player_rating=$5, photo=$6 where id=$7 returning id`, 
                         [updatedUser.username, updatedUser.email, updatedUser.password, updatedUser.city_id, updatedUser.player_rating,updatedUser.photo, updatedUser.id])
         if (result) {
             return result;

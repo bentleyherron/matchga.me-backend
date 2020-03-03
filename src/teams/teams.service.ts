@@ -38,7 +38,7 @@ export const create = async (newTeam: Team): Promise < void > => {
     try {
         const result: any = await db.one(`insert into teams (name, city_id, rating, photo, captain_id, creation_date, is_solo) 
                                             values ($1, $2, $3, $4, $5, $6, $7) 
-                                        returning id`, 
+                                        returning *`, 
                                     [newTeam.name, newTeam.city_id, 5, newTeam.photo, newTeam.captain_id, new Date(), newTeam.is_solo || false])
         if (result) {
             return result;
@@ -51,7 +51,7 @@ export const create = async (newTeam: Team): Promise < void > => {
 // Update a team
 export const update = async (updatedTeam: Team): Promise < void > => {
     try {
-        const result: any = await db.result(`update teams set name=$1, city_id=$2, photo=$3, photo=$4 where id=$5`, 
+        const result: any = await db.result(`update teams set name=$1, city_id=$2, photo=$3, photo=$4 where id=$5 returning id`, 
                                             [updatedTeam.name, updatedTeam.city_id, updatedTeam.photo, updatedTeam.id])
         if (result) {
             return result;
