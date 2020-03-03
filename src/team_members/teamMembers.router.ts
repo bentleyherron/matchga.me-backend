@@ -31,8 +31,8 @@ teamMembersRouter.get("/team/:id", async (req: Request, res: Response) => {
 // POST teams-members/
 teamMembersRouter.post("/", async (req: Request, res: Response) => {
     try {
-        const team: TeamMember = req.body.team;
-        const createdTeam: any = await TeamMemberService.create(team);
+        const teamMember: TeamMember = req.body.teamMember;
+        const createdTeam: any = await TeamMemberService.create(teamMember);
         res.status(201).send(createdTeam);
     } catch (e) {
         res.status(404).send(e.message);
@@ -40,11 +40,10 @@ teamMembersRouter.post("/", async (req: Request, res: Response) => {
 });
 
 // DELETE team-members/:id
-teamMembersRouter.delete("/:id", async (req: Request, res: Response) => {
+teamMembersRouter.delete("/", async (req: Request, res: Response) => {
     try {
-        const playerId: number = parseInt(req.params.player_id, 10);
-        const teamId: number = parseInt(req.params.team_id, 10);
-        await TeamMemberService.remove(playerId, teamId);
+        const teamMember: TeamMember = req.body.teamMember;
+        await TeamMemberService.remove(teamMember);
         res.sendStatus(200);
     } catch (e) {
         res.status(500).send(e.message);

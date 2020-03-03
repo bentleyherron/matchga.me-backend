@@ -45,9 +45,9 @@ export const create = async (newTeamMember: TeamMember): Promise < void > => {
 };
 
 // Removes a team member
-export const remove = async (player_id: number, team_id: number): Promise < void > => {
+export const remove = async (teamMember: TeamMember): Promise < void > => {
     try {
-        const record: any = await db.result(`delete from team_members where player_id=$1 and team_id=$2`, [player_id, team_id])
+        const record: any = await db.result(`delete from team_members where player_id=$1 and team_id=$2`, [teamMember.player_id, teamMember.team_id])
         if (record) {
             return record;
         };
