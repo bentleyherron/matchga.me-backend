@@ -39,7 +39,7 @@ teamMembersRouter.post("/", async (req: Request, res: Response) => {
     }
 });
 
-// DELETE team-members/:id
+// DELETE team-members/
 teamMembersRouter.delete("/", async (req: Request, res: Response) => {
     try {
         const teamMember: TeamMember = req.body.teamMember;

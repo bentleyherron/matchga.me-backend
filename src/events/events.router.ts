@@ -18,9 +18,9 @@ eventsRouter.get("/", async (req: Request, res: Response) => {
 
 // GET events/:id
 eventsRouter.get("/:id", async (req: Request, res: Response) => {
-    const event_id: number = parseInt(req.params.id, 10);
+    const eventId: number = parseInt(req.params.id, 10);
     try {
-        const event: Event = await EventService.find(event_id);
+        const event: Event = await EventService.find(eventId);
         res.status(200).send(event);
     } catch (e) {
         res.status(404).send(e.message);
@@ -53,8 +53,8 @@ eventsRouter.put("/", async (req: Request, res: Response) => {
 // DELETE events/:id
 eventsRouter.delete("/:id", async (req: Request, res: Response) => {
     try {
-        const event_id: number = parseInt(req.params.id, 10);
-        await EventService.remove(event_id);
+        const eventId: number = parseInt(req.params.id, 10);
+        await EventService.remove(eventId);
         res.sendStatus(200);
     } catch (e) {
         res.status(500).send(e.message);
