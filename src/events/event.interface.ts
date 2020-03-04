@@ -1,6 +1,7 @@
 export interface Event {
     id: number;
     title: string;
+    team_id: number; 
     city_id: number;
     sport_id: number;
     longitude: number;
