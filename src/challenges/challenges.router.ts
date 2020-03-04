@@ -54,8 +54,8 @@ challengesRouter.put("/", async (req: Request, res: Response) => {
 challengesRouter.delete("/:id", async (req: Request, res: Response) => {
     try {
         const challengeId: number = parseInt(req.params.id, 10);
-        await ChallengeService.remove(challengeId);
-        res.sendStatus(200);
+        const deletedChallenge = await ChallengeService.remove(challengeId);
+        res.status(200).send(deletedChallenge);
     } catch (e) {
         res.status(500).send(e.message);
     }

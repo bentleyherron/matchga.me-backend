@@ -43,8 +43,8 @@ favoriteSportsRouter.post("/", async (req: Request, res: Response) => {
 favoriteSportsRouter.delete("/:id", async (req: Request, res: Response) => {
     try {
         const favoriteSportId: number = parseInt(req.params.id, 10);
-        await FavoriteSportService.remove(favoriteSportId);
-        res.sendStatus(200);
+        const deletedFavoriteSport =await FavoriteSportService.remove(favoriteSportId);
+        res.status(200).send(deletedFavoriteSport);
     } catch (e) {
         res.status(500).send(e.message);
     }

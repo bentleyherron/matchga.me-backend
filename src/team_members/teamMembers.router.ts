@@ -43,8 +43,8 @@ teamMembersRouter.post("/", async (req: Request, res: Response) => {
 teamMembersRouter.delete("/", async (req: Request, res: Response) => {
     try {
         const teamMember: TeamMember = req.body.teamMember;
-        await TeamMemberService.remove(teamMember);
-        res.sendStatus(200);
+        const deletedTeamMember = await TeamMemberService.remove(teamMember);
+        res.status(200).send(deletedTeamMember);
     } catch (e) {
         res.status(500).send(e.message);
     }

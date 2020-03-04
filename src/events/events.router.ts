@@ -54,8 +54,8 @@ eventsRouter.put("/", async (req: Request, res: Response) => {
 eventsRouter.delete("/:id", async (req: Request, res: Response) => {
     try {
         const eventId: number = parseInt(req.params.id, 10);
-        await EventService.remove(eventId);
-        res.sendStatus(200);
+        const deletedEvent = await EventService.remove(eventId);
+        res.status(200).send(deletedEvent);
     } catch (e) {
         res.status(500).send(e.message);
     }

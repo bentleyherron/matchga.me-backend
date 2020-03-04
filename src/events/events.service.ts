@@ -70,7 +70,7 @@ export const update = async (updatedEvent: Event): Promise < void > => {
 // Removes an event
 export const remove = async (eventId: number): Promise < void > => {
     try {
-        const record: any = await db.result(`delete from events where id=$1`, [eventId])
+        const record: any = await db.result(`delete from events where id=$1 RETURNING *`, [eventId])
         if (record) {
             return record;
         };

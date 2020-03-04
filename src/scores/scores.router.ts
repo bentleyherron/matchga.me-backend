@@ -54,8 +54,8 @@ scoresRouter.put("/", async (req: Request, res: Response) => {
 scoresRouter.delete("/", async (req: Request, res: Response) => {
     try {
         const deleteScore: Score = req.body.score;
-        await ScoreService.remove(deleteScore);
-        res.sendStatus(200);
+        const deletedScore = await ScoreService.remove(deleteScore);
+        res.status(200).send(deletedScore);
     } catch (e) {
         res.status(500).send(e.message);
     }

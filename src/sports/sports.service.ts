@@ -63,7 +63,7 @@ export const update = async (updatedSport: Sport): Promise < void > => {
 // Removes a sport
 export const remove = async (id: number): Promise < void > => {
     try {
-        const record: any = await db.result(`delete from sports where id=$1`, [id])
+        const record: any = await db.result(`delete from sports where id=$1 RETURNING *`, [id])
         if (record) {
             return record;
         };

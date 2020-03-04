@@ -48,8 +48,8 @@ teamsRouter.post("/", async (req: Request, res: Response) => {
 teamsRouter.put("/", async (req: Request, res: Response) => {
     try {
         const team: Team = req.body.team;
-        await TeamService.update(team);
-        res.sendStatus(200);
+        const updatedTeam = await TeamService.update(team);
+        res.status(200).send(updatedTeam);
     } catch (e) {
         res.status(500).send(e.message);
     }
@@ -59,8 +59,8 @@ teamsRouter.put("/", async (req: Request, res: Response) => {
 teamsRouter.delete("/:id", async (req: Request, res: Response) => {
     try {
         const teamId: number = parseInt(req.params.id, 10);
-        await TeamService.remove(teamId);
-        res.sendStatus(200);
+        const deletedTeam = await TeamService.remove(teamId);
+        res.status(200).send(deletedTeam);
     } catch (e) {
         res.status(500).send(e.message);
     }

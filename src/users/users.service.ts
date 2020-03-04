@@ -95,7 +95,7 @@ export const update = async (updatedUser: User): Promise < void > => {
 // Removes a user
 export const remove = async (id: number): Promise < void > => {
     try {
-        const record: any = await db.result(`delete from users where id=$1`, [id])
+        const record: any = await db.result(`delete from users where id=$1 RETURNING *`, [id])
         if (record) {
             return record;
         };
