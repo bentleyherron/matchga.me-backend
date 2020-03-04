@@ -13,6 +13,7 @@ import { profileRouter } from "./profile/profile.router";
 import { scoresRouter } from "./scores/scores.router";
 import { sportsRouter } from "./sports/sports.router";
 import { favoriteSportsRouter } from "./favorite_sports/favoriteSports.router";
+import { challengesRouter } from "./challenges/challenges.router";
 import { errorHandler } from "./middleware/error.middleware";
 import { notFoundHandler } from "./middleware/notFound.middleware";
 
@@ -41,6 +42,7 @@ app.use("/profile", profileRouter);
 app.use("/scores", scoresRouter);
 app.use("/sports", sportsRouter);
 app.use("/favorite-sports", favoriteSportsRouter);
+app.use("/challenges", challengesRouter);
 
 // Error Handling and 404
 app.use(errorHandler);
