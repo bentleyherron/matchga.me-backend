@@ -11,7 +11,7 @@ const pgp = require('pg-promise')({
 });
 
 const options: object = {
-    host: process.env.DB_HOST,
+    host: process.env.DATABASE_URL,
     database: process.env.DB_NAME
 };
 
