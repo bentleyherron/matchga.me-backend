@@ -3,13 +3,6 @@ create table sports (
     name text
 );
 
--- create table region (
---     id serial primary key,
---     city text,
---     latitude float,
---     longitude float
--- );
-
 CREATE TABLE us_states (
 	id integer,
 	STATE_CODE char(2) NOT NULL,
