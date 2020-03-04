@@ -89,7 +89,7 @@ export const update = async (updatedUser: User): Promise < void > => {
         console.log(err)
     }
 
-    throw new Error("No record found to update");
+    throw new Error("No user record found to update");
 };
 
 // Removes a user
@@ -103,5 +103,5 @@ export const remove = async (id: number): Promise < void > => {
         console.log(err)
     }
 
-    throw new Error("No record found to delete");
+    throw new Error("No user record found to delete");
 };

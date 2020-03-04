@@ -44,6 +44,8 @@ export const add = async (favoriteSports: any): Promise < void > => {
     } catch (err) {
         console.log(err)
     }
+
+    throw new Error("Could not add favorite sport");
 };
 
 // Removes a favorite sport
@@ -57,5 +59,5 @@ export const remove = async (favorite_Sport_id: number): Promise < void > => {
         console.log(err)
     }
 
-    throw new Error("No record found to delete");
+    throw new Error("No favorite sport record found to delete");
 };

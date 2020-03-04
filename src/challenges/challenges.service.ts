@@ -15,7 +15,7 @@ export const findAll = async (): Promise < Challenges > => {
     } catch (err) {
         console.log(err)
     }
-    throw new Error("No records found");
+    throw new Error("No challenge records found");
 };
 
 // Find a single challenge
@@ -31,7 +31,7 @@ export const find = async (challengeId: number): Promise < Challenge > => {
         console.log(err)
     }
 
-    throw new Error("No record found");
+    throw new Error("No challenge record found");
 };
 
 // Create an challenge

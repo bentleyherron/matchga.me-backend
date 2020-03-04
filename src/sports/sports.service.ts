@@ -16,7 +16,7 @@ export const findAll = async (): Promise < Sports > => {
         console.log(err)
     }
 
-    throw new Error("No records found");
+    throw new Error("No sports records found");
 };
 
 // Find sport
@@ -28,7 +28,7 @@ export const find = async (sport_id: number): Promise < Sport > => {
         console.log(err)
     }
 
-    throw new Error("No records found");
+    throw new Error("No sport record found");
 };
 
 // Create a sport
@@ -41,6 +41,8 @@ export const create = async (sport: Sport): Promise < void > => {
     } catch (err) {
         console.log(err)
     }
+
+    throw new Error("Could not create sport");
 };
 
 // Update a sport
@@ -55,7 +57,7 @@ export const update = async (updatedSport: Sport): Promise < void > => {
         console.log(err)
     }
 
-    throw new Error("No record found to update");
+    throw new Error("No sport record found to update");
 };
 
 // Removes a sport
@@ -69,5 +71,5 @@ export const remove = async (id: number): Promise < void > => {
         console.log(err)
     }
 
-    throw new Error("No record found to delete");
+    throw new Error("No sport record found to delete");
 };

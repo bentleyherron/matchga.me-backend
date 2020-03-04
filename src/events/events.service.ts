@@ -14,8 +14,9 @@ export const findAll = async (): Promise < Events > => {
         return events;
     } catch (err) {
         console.log(err)
-        return [];
     }
+
+    throw new Error("No event records found");
 };
 
 // Find a single event
@@ -31,7 +32,7 @@ export const find = async (eventId: number): Promise < Event > => {
         console.log(err)
     }
 
-    throw new Error("No record found");
+    throw new Error("No event record found");
 };
 
 // Create an event
@@ -47,6 +48,8 @@ export const create = async (newEvent: Event): Promise < void > => {
     } catch (err) {
         console.log(err)
     }
+
+    throw new Error("Could not create event");
 };
 
 // Update an event
@@ -61,7 +64,7 @@ export const update = async (updatedEvent: Event): Promise < void > => {
         console.log(err)
     }
 
-    throw new Error("No record found to update");
+    throw new Error("No event record found to update");
 };
 
 // Removes an event
@@ -75,5 +78,5 @@ export const remove = async (eventId: number): Promise < void > => {
         console.log(err)
     }
 
-    throw new Error("No record found to delete");
+    throw new Error("No event record found to delete");
 };

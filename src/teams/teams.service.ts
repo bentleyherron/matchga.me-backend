@@ -13,8 +13,9 @@ export const findAll = async (): Promise < Teams > => {
         return teams;
     } catch (err) {
         console.log(err)
-        return [];
     }
+
+    throw new Error("No team records found");
 };
 
 // Find a single team
@@ -30,7 +31,7 @@ export const find = async (id: number): Promise < Team > => {
         console.log(err)
     }
 
-    throw new Error("No record found");
+    throw new Error("No team record found");
 };
 
 // Create a team
@@ -46,6 +47,8 @@ export const create = async (newTeam: Team): Promise < void > => {
     } catch (err) {
         console.log(err)
     }
+
+    throw new Error("Could not create team");
 };
 
 // Update a team
@@ -60,7 +63,7 @@ export const update = async (updatedTeam: Team): Promise < void > => {
         console.log(err)
     }
 
-    throw new Error("No record found to update");
+    throw new Error("No team record found to update");
 };
 
 // Removes a team
@@ -74,5 +77,5 @@ export const remove = async (id: number): Promise < void > => {
         console.log(err)
     }
 
-    throw new Error("No record found to delete");
+    throw new Error("No team record found to delete");
 };
