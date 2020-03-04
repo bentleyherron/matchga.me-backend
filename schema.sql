@@ -93,10 +93,13 @@ create table scores (
 );
 
 create table challenges (
+    id serial primary key,
     team_from_id integer references teams(id),
     team_to_id integer references teams(id),
     city_id integer references us_cities(id),
     sport_id integer references sports(id),
+    longitude float,
+    latitude float,
     datetime date,
     message text,
     wager integer,

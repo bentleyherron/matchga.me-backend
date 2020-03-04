@@ -70,8 +70,8 @@ usersRouter.put("/", async (req: Request, res: Response) => {
 usersRouter.delete("/:id", async (req: Request, res: Response) => {
     try {
         const userId: number = parseInt(req.params.id, 10);
-        await UserService.remove(userId);
-        res.sendStatus(200);
+        const deletedUser = await UserService.remove(userId);
+        res.status(200).send(deletedUser);
     } catch (e) {
         res.status(500).send(e.message);
     }

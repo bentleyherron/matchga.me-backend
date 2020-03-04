@@ -16,7 +16,7 @@ export const findAll = async (): Promise < Scores > => {
         console.log(err)
     }
 
-    throw new Error("No records found");
+    throw new Error("No score records found");
 };
 
 // Find all team scores
@@ -28,7 +28,7 @@ export const findAllTeamScores = async (team_id: number): Promise < Scores > => 
         console.log(err)
     }
 
-    throw new Error("No records found");
+    throw new Error("No team score records found");
 };
 
 // Find a event score
@@ -44,7 +44,7 @@ export const findEventScore = async (event_id: number): Promise < Score > => {
         console.log(err)
     }
     
-    throw new Error("No record found");
+    throw new Error("No event score record found");
 };
 
 // Create a score entry
@@ -60,6 +60,8 @@ export const create = async (score: Score): Promise < void > => {
     } catch (err) {
         console.log(err)
     }
+
+    throw new Error("Could not create score");
 };
 
 // Update a score
@@ -74,13 +76,13 @@ export const update = async (updatedScore: Score): Promise < void > => {
         console.log(err)
     }
 
-    throw new Error("No record found to update");
+    throw new Error("No score record found to update");
 };
 
 // Removes a score
 export const remove = async (scoreInfo: Score): Promise < void > => {
     try {
-        const record: any = await db.result(`delete from scores where team_id=$1 and event_id=$2`, [scoreInfo.team_id, scoreInfo.event_id])
+        const record: any = await db.result(`delete from scores where team_id=$1 and event_id=$2 RETURNING *`, [scoreInfo.team_id, scoreInfo.event_id])
         if (record) {
             return record;
         };
@@ -88,5 +90,5 @@ export const remove = async (scoreInfo: Score): Promise < void > => {
         console.log(err)
     }
 
-    throw new Error("No record found to delete");
+    throw new Error("No score record found to delete");
 };
