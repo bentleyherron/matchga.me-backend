@@ -18,5 +18,11 @@ const options: object = {
     port: process.env.DB_PORT
 };
 
-const db = pgp(options);
+let db: any;
+if (process.env.NODE_ENV === "production") {
+    db = pgp(process.env.DATABASE_URL);
+} else {
+    db = pgp(options);
+}
+
 export {db};
