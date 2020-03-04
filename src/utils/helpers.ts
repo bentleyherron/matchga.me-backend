@@ -14,6 +14,7 @@ export async function createUserTeam(userCreated: any) {
         name: userInfo.username,
         city_id: userInfo.city_id,
         captain_id: userInfo.id,
+        sport_id: 0o0,
         photo: null,
         creation_date: userInfo.joined_date,
         rating: 0o0,
