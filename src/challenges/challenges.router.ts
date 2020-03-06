@@ -27,6 +27,16 @@ challengesRouter.get("/:id", async (req: Request, res: Response) => {
     }
 });
 
+// GET challenges/city/:id
+challengesRouter.get("/city/:id", async (req: Request, res: Response) => {
+    const cityId: number = parseInt(req.params.id, 10);
+    try {
+        const challenges: Challenges = await ChallengeService.findAllByCity(cityId);
+        res.status(200).send(challenges);
+    } catch (e) {
+        res.status(404).send(e.message);
+    }
+});
 
 // POST challenges/
 challengesRouter.post("/", async (req: Request, res: Response) => {

@@ -18,6 +18,17 @@ export const findAll = async (): Promise < Challenges > => {
     throw new Error("No challenge records found");
 };
 
+// Find all challenges
+export const findAllByCity = async (cityId: number): Promise < Challenges > => {
+    try {
+        const challenges: Challenges = await db.any(`select * from challenges where city_id=$1;`, [cityId]);
+        return challenges;
+    } catch (err) {
+        console.log(err)
+    }
+    throw new Error("No challenge records found");
+};
+
 // Find a single challenge
 export const find = async (challengeId: number): Promise < Challenge > => {
     try {
