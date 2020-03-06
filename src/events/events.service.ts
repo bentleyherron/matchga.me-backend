@@ -44,7 +44,7 @@ export const create = async (newEvent: Event, eventTeams: any): Promise < void >
                                         returning *`, 
                                     [newEvent.title, newEvent.team_id, newEvent.city_id, newEvent.sport_id, newEvent.longitude, newEvent.latitude, newEvent.winner_id, newEvent.date, newEvent.description, newEvent.photo, newEvent.is_public || true, newEvent.event_occured_on]);
         const eventTeamsReturn: any = eventTeams.map(async (team: any) => {
-            return await db.one(`insert into event_teams (event_id, team_id) values ($1, $2) returning *`, [team])
+            return await db.one(`insert into event_teams (event_id, team_id) values ($1, $2) returning *`, [result.id, team]);
         });
         const eventTeamsResult: any = await Promise.all(eventTeamsReturn);
         if (result) {
