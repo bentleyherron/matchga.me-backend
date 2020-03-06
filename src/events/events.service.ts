@@ -25,7 +25,7 @@ export const find = async (eventId: number): Promise < Event > => {
         const event: Event = await db.one(`select * from events where id=$1;`, [eventId]);
         const eventTeams: any = await db.any(`select * from event_teams where event_id=$1`, [eventId]);
         if (event) {
-            const eventInfo: any = {event, eventTeams}
+            const eventInfo: any = {event, eventTeams};
             return eventInfo;
         };
 
@@ -48,7 +48,8 @@ export const create = async (newEvent: Event, eventTeams: any): Promise < void >
         });
         const eventTeamsResult: any = await Promise.all(eventTeamsReturn);
         if (result) {
-            return result;
+            const eventCreated: any = {event: result, eventTeams: eventTeamsResult};
+            return eventCreated;
         };
     } catch (err) {
         console.log(err)
