@@ -1,6 +1,7 @@
 import { States } from "./states.interface";
 import { Cities } from "./cities.interface";
 import { db } from '../db/connect';
+import { City } from "./city.interface";
 
 /**
  * Service Methods
@@ -28,4 +29,16 @@ export const getAllCitiesFromState = async (state_id: number): Promise < Cities 
     }
 
     throw new Error("No cities found for that state");
+};
+
+// Get city info by id
+export const getCityInfo = async (cityId: number): Promise < City > => {
+    try {
+        const city: City = await db.any(`select * from us_cities where id=$1;`, [cityId]);
+        return city;
+    } catch (err) {
+        console.log(err)
+    }
+
+    throw new Error("No city found");
 };
