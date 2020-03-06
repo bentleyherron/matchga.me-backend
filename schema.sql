@@ -27,8 +27,8 @@ create table users (
     password text,
     nickname text,
     city_id integer references us_cities(id),
-    joined_date date,
-    last_logged_in date,
+    joined_date timestamptz,
+    last_logged_in timestamptz,
     player_rating float,
     photo text
 );
@@ -41,7 +41,7 @@ create table teams (
     sport_id integer references sports(id),
     rating float,
     photo text,
-    creation_date date,
+    creation_date timestamptz,
     is_solo boolean
 );
 
@@ -66,11 +66,11 @@ create table events (
     longitude float,
     latitude float,
     winner_id integer references teams(id),
-    date date,
+    date timestamptz,
     description text,
     photo text,
     is_public boolean,
-    event_occured_on date
+    event_occured_on timestamptz
 );
 
 create table event_teams (
@@ -93,7 +93,7 @@ create table challenges (
     sport_id integer references sports(id),
     longitude float,
     latitude float,
-    datetime date,
+    datetime timestamptz,
     message text,
     wager integer,
     is_accepted boolean
