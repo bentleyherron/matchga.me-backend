@@ -30,7 +30,8 @@ create table users (
     joined_date timestamptz,
     last_logged_in timestamptz,
     player_rating float,
-    photo text
+    photo text,
+    token text
 );
 
 create table teams (

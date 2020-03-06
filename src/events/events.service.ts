@@ -23,9 +23,10 @@ export const findAll = async (): Promise < Events > => {
 export const find = async (eventId: number): Promise < Event > => {
     try {
         const event: Event = await db.one(`select * from events where id=$1;`, [eventId]);
-
+        const eventTeams: any = await db.any(`select * from event_teams where event_id=$1`, [eventId]);
         if (event) {
-            return event;
+            const eventInfo: any = {event, eventTeams}
+            return eventInfo;
         };
 
     } catch (err) {
@@ -36,12 +37,16 @@ export const find = async (eventId: number): Promise < Event > => {
 };
 
 // Create an event
-export const create = async (newEvent: Event): Promise < void > => {
+export const create = async (newEvent: Event, eventTeams: any): Promise < void > => {
     try {
         const result: any = await db.one(`insert into events (title, team_id, city_id, sport_id, longitude, latitude, winner_id, date, description, photo, is_public, event_occured_on) 
                                             values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) 
                                         returning *`, 
-                                    [newEvent.title, newEvent.team_id, newEvent.city_id, newEvent.sport_id, newEvent.longitude, newEvent.latitude, newEvent.winner_id, newEvent.date, newEvent.description, newEvent.photo, newEvent.is_public || true, newEvent.event_occured_on])
+                                    [newEvent.title, newEvent.team_id, newEvent.city_id, newEvent.sport_id, newEvent.longitude, newEvent.latitude, newEvent.winner_id, newEvent.date, newEvent.description, newEvent.photo, newEvent.is_public || true, newEvent.event_occured_on]);
+        const eventTeamsReturn: any = eventTeams.map(async (team: any) => {
+            return await db.one(`insert into event_teams (event_id, team_id) values ($1, $2) returning *`, [team])
+        });
+        const eventTeamsResult: any = await Promise.all(eventTeamsReturn);
         if (result) {
             return result;
         };
