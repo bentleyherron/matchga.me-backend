@@ -92,7 +92,7 @@ export const create = async (newUser: User): Promise < void > => {
 // Update a user
 export const update = async (updatedUser: User): Promise < void > => {
     try {
-        const result: any = await db.result(`update users set username=COALESCE($1, username), email=COALESCE($2, email), password=COALESCE($3, password), city_id=COALESCE($4, city_id), player_rating=COALESCE($5,player_rating), photo=COALESCE($6, photo) where id=$7 returning id`, 
+        const result: any = await db.result(`update users set username=COALESCE($1, username), email=COALESCE($2, email), password=COALESCE($3, password), city_id=COALESCE($4, city_id), player_rating=COALESCE($5, player_rating), photo=COALESCE($6, photo) where id=$7 returning id`, 
                         [updatedUser.username, updatedUser.email, updatedUser.password, updatedUser.city_id, updatedUser.player_rating,updatedUser.photo, updatedUser.id])
         if (result) {
             return result;
