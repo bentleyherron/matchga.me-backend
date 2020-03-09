@@ -21,7 +21,8 @@ export const getPlayerProfile = async (player_id: number): Promise < UserProfile
     try {
         const userInfo: User = await UserService.find(player_id);
         const favoriteSports: FavoriteSports = await FavoriteSportService.findAllPlayerSports(player_id);
-        const teams: any = await TeamMemberService.findAllPlayerTeams(player_id);
+        const playerTeams: any = await TeamMemberService.findAllPlayerTeams(player_id);
+        const teams: any = await Promise.all(await playerTeams.map(async (team: any) => await TeamService.find(team.team_id)));
         const teamScores: any = await db.any('select * from scores where team_id in (select team_id from team_members where player_id=$1)', [player_id]);
         let initalValue: number = 0;
         const totalScore: number = teamScores.reduce((total: number, item: any) => {return total + item.score}, initalValue);
