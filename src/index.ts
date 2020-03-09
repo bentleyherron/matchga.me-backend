@@ -12,10 +12,12 @@ import { statesRouter } from "./states/states.router";
 import { profileRouter } from "./profile/profile.router";
 import { scoresRouter } from "./scores/scores.router";
 import { sportsRouter } from "./sports/sports.router";
+import { login } from "./login/login.router";
 import { favoriteSportsRouter } from "./favorite_sports/favoriteSports.router";
 import { challengesRouter } from "./challenges/challenges.router";
 import { errorHandler } from "./middleware/error.middleware";
 import { notFoundHandler } from "./middleware/notFound.middleware";
+import { Auth } from "./middleware/auth.middleware";
 
 // Use dotenv for environment variables
 dotenv.config();
@@ -32,10 +34,9 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json({limit: '1mb'}));
 
-// Authentication
-
-
 // Routing
+app.post('/login', login);
+// app.use("/users", Auth.verifyToken, usersRouter);
 app.use("/users", usersRouter);
 app.use("/events", eventsRouter);
 app.use("/teams", teamsRouter);

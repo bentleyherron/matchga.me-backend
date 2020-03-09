@@ -19,8 +19,9 @@ usersRouter.get("/", async (req: Request, res: Response) => {
 });
 
 // GET users/:id
-usersRouter.get("/:id", async (req: Request, res: Response) => {
-    const userId: number = parseInt(req.params.id, 10);
+usersRouter.get("/me", async (req: Request, res: Response) => {
+    // const userId: number = parseInt(req.params.id, 10);
+    const userId: number = parseInt(req.body.userAuth.userId, 10);
     try {
         const user: User = await UserService.find(userId);
         res.status(200).send(user);
