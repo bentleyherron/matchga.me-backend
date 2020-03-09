@@ -56,6 +56,7 @@ export const getTeamProfile = async (teamId: number): Promise < TeamProfile > =>
         const teamProfile: TeamProfile = {
             team_id: teamInfo.id,
             team_name: teamInfo.name,
+            team_photo: teamInfo.photo,
             team_members: teamMemberProfiles,
             score: totalScore,
             sport_id: teamInfo.sport_id,
