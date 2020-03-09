@@ -19,6 +19,18 @@ export const findAll = async (): Promise < Events > => {
     throw new Error("No event records found");
 };
 
+// Find all events by city id
+export const findAllByCity = async (cityId: number): Promise < Events > => {
+    try {
+        const events: Events = await db.any(`select * from events where city_id=$1`, [cityId]);
+        return events;
+    } catch (err) {
+        console.log(err)
+    }
+
+    throw new Error("No event records found");
+};
+
 // Find a single event
 export const find = async (eventId: number): Promise < Event > => {
     try {

@@ -27,6 +27,16 @@ eventsRouter.get("/:id", async (req: Request, res: Response) => {
     }
 });
 
+// GET events/city/:id
+eventsRouter.get("/city/:id", async (req: Request, res: Response) => {
+    const cityId: number = parseInt(req.params.id, 10);
+    try {
+        const events: Events = await EventService.findAllByCity(cityId);
+        res.status(200).send(events);
+    } catch (e) {
+        res.status(404).send(e.message);
+    }
+});
 
 // POST events/
 eventsRouter.post("/", async (req: Request, res: Response) => {
