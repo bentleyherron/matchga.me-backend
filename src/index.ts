@@ -12,7 +12,7 @@ import { statesRouter } from "./states/states.router";
 import { profileRouter } from "./profile/profile.router";
 import { scoresRouter } from "./scores/scores.router";
 import { sportsRouter } from "./sports/sports.router";
-import { login } from "./login/login.router";
+import { loginRouter } from "./login/login.router";
 import { favoriteSportsRouter } from "./favorite_sports/favoriteSports.router";
 import { challengesRouter } from "./challenges/challenges.router";
 import { errorHandler } from "./middleware/error.middleware";
@@ -35,7 +35,7 @@ app.use(cors());
 app.use(express.json({limit: '1mb'}));
 
 // Routing
-app.post('/login', login);
+app.use('/login', loginRouter);
 // app.use("/users", Auth.verifyToken, usersRouter);
 app.use("/users", usersRouter);
 app.use("/events", eventsRouter);

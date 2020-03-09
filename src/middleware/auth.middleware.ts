@@ -11,7 +11,7 @@ export const Auth = {
     }
     try {
       const decoded: any = await jwt.verify(token, secret);
-      const text = 'SELECT * FROM users WHERE id = $1';
+      const text: string = 'SELECT * FROM users WHERE id = $1';
       const result = await db.one(text, [decoded.userId]);
       if(!result) {
         return res.status(400).send({ 'message': 'The token you provided is invalid' });

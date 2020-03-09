@@ -1,38 +1,30 @@
-import { Request, Response, NextFunction } from "express";
+import express, { Request, Response } from "express";
+import * as LoginService from "./login.service";
 import { Helper } from "../utils/helpers";
-import { db } from '../db/connect';
+
+export const loginRouter = express.Router();
 
 
-export const login = async (req: Request, res: Response) => {
-    if (!req.body.user.email || !req.body.user.password) {
-        return res.status(400).send({
-            'message': 'Some values are missing'
-        });
-    }
-    if (!Helper.isValidEmail(req.body.user.email)) {
-        return res.status(400).send({
-            'message': 'Please enter a valid email address'
-        });
-    }
-    const text = 'SELECT * FROM users WHERE LOWER(email) = $1';
+// POST login/
+loginRouter.post("/", async (req: Request, res: Response) => {
+    const userInfo = req.body.user;
     try {
-        const email = req.body.user.email.toLowerCase();
-        const result = await db.one(text, [email]);
-        if (!result) {
-            return res.status(400).send({
-                'message': 'The credentials you provided is incorrect'
-            });
+        if (!userInfo.email || !userInfo.password) {
+            return res.status(400).send({'message': 'Some values are missing'});
         }
-        if (!Helper.comparePassword(result.password, req.body.user.password)) {
-            return res.status(400).send({
-                'message': 'The credentials you provided is incorrect'
-            });
+        if (!Helper.isValidEmail(userInfo.email)) {
+            return res.status(400).send({'message': 'Please enter a valid email address'});
+        }
+        const result = await LoginService.login(userInfo);
+        if (!result) {
+            return res.status(400).send({'message': 'The credentials you provided is incorrect'});
+        }
+        if (!Helper.comparePassword(result.password, userInfo.password)) {
+            return res.status(400).send({'message': 'The credentials you provided is incorrect'});
         }
         const token = Helper.generateToken(result.id);
-        return res.status(200).send({
-            token
-        });
-    } catch (error) {
-        return res.status(400).send(error)
+        return res.status(200).send({token});
+    } catch (e) {
+        res.status(404).send(e.message);
     }
-};
+});
