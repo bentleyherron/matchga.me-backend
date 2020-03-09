@@ -31,11 +31,15 @@ export const findAllByCity = async (cityId: number): Promise < Teams > => {
 };
 
 // Find a single team
-export const find = async (id: number): Promise < Team > => {
+export const find = async (teamId: number): Promise < Team > => {
     try {
-        const record: Team = await db.one(`select * from teams where id=$1;`, [id]);
+        const record: Team = await db.one(`select * from teams where id=$1;`, [teamId]);
+        const teamScores: any = await db.any('select * from scores where team_id=$1', [teamId]);
+        let initalValue: number = 0;
+        const totalScore: number = teamScores.reduce((total: number, item: any) => {return total + item.score}, initalValue);
 
         if (record) {
+            record.team_score = totalScore;
             return record;
         };
 

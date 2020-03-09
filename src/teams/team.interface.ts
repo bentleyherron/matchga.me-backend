@@ -8,4 +8,5 @@ export interface Team {
     captain_id: number;
     creation_date: Date;
     is_solo: boolean;
+    team_score?: number;
 };
