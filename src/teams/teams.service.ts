@@ -70,7 +70,7 @@ export const create = async (newTeam: Team): Promise < void > => {
 // Update a team
 export const update = async (updatedTeam: Team): Promise < void > => {
     try {
-        const result: any = await db.result(`update teams set name=$1, city_id=$2, captain_id=$3, sport_id=$4, rating=$5, photo=$6 where id=$7 returning id`, 
+        const result: any = await db.result(`update teams set name=COALESCE($1, name), city_id=COALESCE($2, city_id), captain_id=COALESCE($3, captain_id), sport_id=COALESCE($4, sport_id), rating=COALESCE($5, rating), photo=COALESCE($6, photo) where id=$7 returning id`, 
                                             [updatedTeam.name, updatedTeam.city_id, updatedTeam.captain_id, updatedTeam.sport_id, updatedTeam.rating, updatedTeam.photo, updatedTeam.id])
         if (result) {
             return result;

@@ -48,7 +48,7 @@ export const create = async (sport: Sport): Promise < void > => {
 // Update a sport
 export const update = async (updatedSport: Sport): Promise < void > => {
     try {
-        const result: any = await db.result(`update sports set name=$1 where id=$2 returning id`, 
+        const result: any = await db.result(`update sports set name=COALESCE($1, name) where id=$2 returning id`, 
                         [updatedSport.name, updatedSport.id])
         if (result) {
             return result;
