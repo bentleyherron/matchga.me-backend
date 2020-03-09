@@ -31,7 +31,8 @@ create table users (
     last_logged_in timestamptz,
     player_rating float,
     photo text,
-    token text
+    token text,
+    uuid uuid
 );
 
 create table teams (

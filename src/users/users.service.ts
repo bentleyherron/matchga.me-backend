@@ -1,6 +1,8 @@
 import { User } from "./user.interface";
 import { Users } from "./users.interface";
 import { db } from '../db/connect';
+import { Helper } from "../utils/helpers";
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Service Methods
@@ -36,6 +38,9 @@ export const find = async (id: number): Promise < User > => {
         const record: User = await db.one(`select * from users where id=$1;`, [id]);
 
         if (record) {
+            delete record.password;
+            delete record.uuid;
+            delete record.token;
             return record;
         };
 
@@ -77,11 +82,16 @@ export const checkUser = async (user: User): Promise < User > => {
 // Create a user
 export const create = async (newUser: User): Promise < void > => {
     try {
-        const result: any = await db.one(`insert into users (username, email, password, nickname, city_id, joined_date, player_rating, photo) 
-                                            values ($1, $2, $3, $4, $5, $6, $7, $8) 
+        const hashPassword: string = Helper.hashPassword(newUser.password);
+        newUser.password = hashPassword;
+        newUser.uuid = uuidv4();
+        const result: any = await db.one(`insert into users (username, email, password, nickname, city_id, joined_date, player_rating, photo, uuid) 
+                                            values ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
                                         returning *`, 
-                                    [newUser.username, newUser.email, newUser.password, newUser.nickname, newUser.city_id, new Date(), 5, newUser.photo])
+                                    [newUser.username, newUser.email, newUser.password, newUser.nickname, newUser.city_id, new Date(), 5, newUser.photo, newUser.uuid])
         if (result) {
+            const token: any = Helper.generateToken(result.uuid);
+            result.token = token
             return result;
         };
     } catch (err) {
