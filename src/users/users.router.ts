@@ -29,6 +29,17 @@ usersRouter.get("/:id", async (req: Request, res: Response) => {
     }
 });
 
+// GET users/city/:id
+usersRouter.get("/city/:id", async (req: Request, res: Response) => {
+    const cityId: number = parseInt(req.params.id, 10);
+    try {
+        const users: Users = await UserService.findAllByCity(cityId);
+        res.status(200).send(users);
+    } catch (e) {
+        res.status(404).send(e.message);
+    }
+});
+
 // POST users/check
 usersRouter.post("/check", async (req: Request, res: Response) => {
     try {

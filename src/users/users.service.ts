@@ -18,6 +18,18 @@ export const findAll = async (): Promise < Users > => {
     throw new Error("No user records found");
 };
 
+// Find all users by city id
+export const findAllByCity = async (cityId: number): Promise < Users > => {
+    try {
+        const users: Users = await db.any(`select * from users where city_id=$1;`, [cityId]);
+        return users;
+    } catch (err) {
+        console.log(err)
+    }
+
+    throw new Error("No user records found");
+};
+
 // Find a single user
 export const find = async (id: number): Promise < User > => {
     try {

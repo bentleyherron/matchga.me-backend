@@ -28,6 +28,16 @@ teamsRouter.get("/:id", async (req: Request, res: Response) => {
     }
 });
 
+// GET teams/city/:id
+teamsRouter.get("/city/:id", async (req: Request, res: Response) => {
+    const cityId: number = parseInt(req.params.id, 10);
+    try {
+        const teams: Teams = await TeamService.findAllByCity(cityId);
+        res.status(200).send(teams);
+    } catch (e) {
+        res.status(404).send(e.message);
+    }
+});
 
 // POST teams/
 teamsRouter.post("/", async (req: Request, res: Response) => {

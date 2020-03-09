@@ -18,6 +18,18 @@ export const findAll = async (): Promise < Teams > => {
     throw new Error("No team records found");
 };
 
+// Find all teams by city_id
+export const findAllByCity = async (cityId: number): Promise < Teams > => {
+    try {
+        const teams: Teams = await db.any(`select * from teams where city_id=$1`, [cityId]);
+        return teams;
+    } catch (err) {
+        console.log(err)
+    }
+
+    throw new Error("No team records found");
+};
+
 // Find a single team
 export const find = async (id: number): Promise < Team > => {
     try {
