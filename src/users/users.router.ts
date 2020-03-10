@@ -18,17 +18,6 @@ usersRouter.get("/", async (req: Request, res: Response) => {
     }
 });
 
-// GET users/:id
-usersRouter.get("/:id", async (req: Request, res: Response) => {
-    const userId: number = parseInt(req.params.id, 10);
-    try {
-        const user: User = await UserService.find(userId);
-        res.status(200).send(user);
-    } catch (e) {
-        res.status(404).send(e.message);
-    }
-});
-
 // GET users/me
 usersRouter.get("/me", async (req: Request, res: Response) => {
     const userId: number = parseInt(req.body.userAuth.userId, 10);
@@ -87,6 +76,8 @@ usersRouter.post("/", async (req: Request, res: Response) => {
 usersRouter.put("/", async (req: Request, res: Response) => {
     try {
         const user: User = req.body.user;
+        const userId: number = parseInt(req.body.userAuth.userId, 10);
+        user.id = userId;
         const updatedUser: any = await UserService.update(user);
         res.status(200).send(updatedUser);
     } catch (e) {
@@ -97,7 +88,7 @@ usersRouter.put("/", async (req: Request, res: Response) => {
 // DELETE users/:id
 usersRouter.delete("/:id", async (req: Request, res: Response) => {
     try {
-        const userId: number = parseInt(req.params.id, 10);
+        const userId: number = parseInt(req.body.userAuth.userId, 10);
         const deletedUser = await UserService.remove(userId);
         res.status(200).send(deletedUser);
     } catch (e) {

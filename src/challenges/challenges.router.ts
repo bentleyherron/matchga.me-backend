@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import * as ChallengeService from "./challenges.service";
 import { Challenge } from "./challenge.interface";
 import { Challenges } from "./challenges.interface";
+import * as TeamMemberService from "../team_members/teamMembers.service";
 
 export const challengesRouter = express.Router();
 
@@ -51,6 +52,8 @@ challengesRouter.post("/", async (req: Request, res: Response) => {
 
 // PUT challenges/
 challengesRouter.put("/", async (req: Request, res: Response) => {
+    const userId: number = parseInt(req.body.userAuth.userId, 10);
+    const teams: any = await TeamMemberService.findAllPlayerTeams(userId);
     try {
         const challenge: Challenge = req.body.challenge;
         const updatedChallenge: any = await ChallengeService.update(challenge);
