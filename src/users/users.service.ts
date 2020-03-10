@@ -54,21 +54,19 @@ export const find = async (id: number): Promise < User > => {
 // Check if a user exists
 export const checkUser = async (user: User): Promise < User > => {
     try {
-        const usernameExists: any = await db.result(`select exists(select 1 from users where LOWER(username)=$1)`, [user.username.toLowerCase()]);
-        const emailExists: any = await db.result(`select exists(select 1 from users where LOWER(email)=$1)`, [user.email.toLowerCase()]);
-        const result: any = {usernameFound: false, emailFound: false}
-
-        if (usernameExists.rows[0].exists == true && emailExists.rows[0].exists == true) {
-            result.usernameFound = true;
-            result.emailFound = true;
+        if (user.username) {
+            const usernameExists: any = await db.result(`select exists(select 1 from users where LOWER(username)=$1)`, [user.username.toLowerCase()]);
+            const result: any = {usernameFound: false}
+            if (usernameExists) {
+                result.usernameFound = true;
+            }
             return result;
-        } else if (usernameExists.rows[0].exists == true && emailExists.rows[0].exists == false) {
-            result.usernameFound = true;
-            return result;
-        } else if (usernameExists.rows[0].exists == false && emailExists.rows[0].exists == true) {
-            result.emailFound = true;
-            return result;
-        } else {
+        } else if (user.email) {
+            const emailExists: any = await db.result(`select exists(select 1 from users where LOWER(email)=$1)`, [user.email.toLowerCase()]);
+            const result: any = {emailFound: false}
+            if (emailExists) {
+                result.emailFound = true;
+            }
             return result;
         }
 
