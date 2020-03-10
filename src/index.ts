@@ -15,6 +15,7 @@ import { sportsRouter } from "./sports/sports.router";
 import { loginRouter } from "./login/login.router";
 import { favoriteSportsRouter } from "./favorite_sports/favoriteSports.router";
 import { challengesRouter } from "./challenges/challenges.router";
+import { signupRouter } from "./login/signup.router";
 import { errorHandler } from "./middleware/error.middleware";
 import { notFoundHandler } from "./middleware/notFound.middleware";
 import { Auth } from "./middleware/auth.middleware";
@@ -36,6 +37,7 @@ app.use(express.json({limit: '1mb'}));
 
 // Routing
 app.use('/login', loginRouter);
+app.use('/signup', signupRouter);
 app.use("/users", Auth.verifyToken, usersRouter);
 app.use("/events", Auth.verifyToken, eventsRouter);
 app.use("/teams", Auth.verifyToken, teamsRouter);
