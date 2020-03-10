@@ -9,7 +9,7 @@ import { db } from '../db/connect';
 // Find all users
 export const findAll = async (): Promise < Users > => {
     try {
-        const users: Users = await db.any(`select id, username, nickname, city_id, joined_date, last_logged_in, player_rating, photo from users;`);
+        const users: Users = await db.any(`select id, username, email, nickname, city_id, joined_date, last_logged_in, player_rating, photo from users;`);
         return users;
     } catch (err) {
         console.log(err)
@@ -21,7 +21,7 @@ export const findAll = async (): Promise < Users > => {
 // Find all users by city id
 export const findAllByCity = async (cityId: number): Promise < Users > => {
     try {
-        const users: Users = await db.any(`select id, username, nickname, city_id, joined_date, last_logged_in, player_rating, photo from users where city_id=$1;`, [cityId]);
+        const users: Users = await db.any(`select id, username, email, nickname, city_id, joined_date, last_logged_in, player_rating, photo from users where city_id=$1;`, [cityId]);
         return users;
     } catch (err) {
         console.log(err)
@@ -33,7 +33,7 @@ export const findAllByCity = async (cityId: number): Promise < Users > => {
 // Find a single user
 export const find = async (id: number): Promise < User > => {
     try {
-        const record: User = await db.one(`select id, username, nickname, city_id, joined_date, last_logged_in, player_rating, photo from users where id=$1;`, [id]);
+        const record: User = await db.one(`select id, username, email, nickname, city_id, joined_date, last_logged_in, player_rating, photo from users where id=$1;`, [id]);
 
         if (record) {
             return record;
@@ -92,8 +92,8 @@ export const create = async (newUser: User): Promise < void > => {
 // Update a user
 export const update = async (updatedUser: User): Promise < void > => {
     try {
-        const result: any = await db.result(`update users set username=COALESCE($1, username), email=COALESCE($2, email), password=COALESCE($3, password), city_id=COALESCE($4, city_id), player_rating=COALESCE($5, player_rating), photo=COALESCE($6, photo) where id=$7 returning id`, 
-                        [updatedUser.username, updatedUser.email, updatedUser.password, updatedUser.city_id, updatedUser.player_rating,updatedUser.photo, updatedUser.id])
+        const result: any = await db.result(`update users set username=COALESCE($1, username), email=COALESCE($2, email), password=COALESCE($3, password), city_id=COALESCE($4, city_id), player_rating=COALESCE($5, player_rating), photo=COALESCE($6, photo), nickname=COALESCE($7, nickname) where id=$8 returning id`, 
+                        [updatedUser.username, updatedUser.email, updatedUser.password, updatedUser.city_id, updatedUser.player_rating,updatedUser.photo, updatedUser.nickname, updatedUser.id])
         if (result) {
             return result;
         };
