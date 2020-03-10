@@ -6,11 +6,11 @@ import { FavoriteSports } from "./favoriteSports.interface";
 export const favoriteSportsRouter = express.Router();
 
 
-// GET favorite-sports/player/:id (Find all favorite sports for a player)
-favoriteSportsRouter.get("/player/:id", async (req: Request, res: Response) => {
-    const playerId: number = parseInt(req.params.id, 10);
+// GET favorite-sports/player/ (Find all favorite sports for logged in player)
+favoriteSportsRouter.get("/player/", async (req: Request, res: Response) => {
+    const userId: number = parseInt(req.body.userAuth.userId, 10);
     try {
-        const sports: FavoriteSports = await FavoriteSportService.findAllPlayerSports(playerId);
+        const sports: FavoriteSports = await FavoriteSportService.findAllPlayerSports(userId);
         res.status(200).send(sports);
     } catch (e) {
         res.status(404).send(e.message);
@@ -30,9 +30,14 @@ favoriteSportsRouter.get("/team/:id", async (req: Request, res: Response) => {
 
 // POST favorite-sports/
 favoriteSportsRouter.post("/", async (req: Request, res: Response) => {
+    const sports: any = req.body.favoriteSports;
+    const userId: number = parseInt(req.body.userAuth.userId, 10);
+    const userSports: FavoriteSports = sports.map((sport: FavoriteSport) => {
+        sport.user_id = userId
+        return sport;
+    })
     try {
-        const sports: FavoriteSports = req.body.favoriteSports;
-        const createdFavoriteSport: any = await FavoriteSportService.add(sports);
+        const createdFavoriteSport: any = await FavoriteSportService.add(userSports);
         res.status(201).send(createdFavoriteSport);
     } catch (e) {
         res.status(404).send(e.message);
@@ -40,10 +45,12 @@ favoriteSportsRouter.post("/", async (req: Request, res: Response) => {
 });
 
 // DELETE favorite-sports/:id
-favoriteSportsRouter.delete("/:id", async (req: Request, res: Response) => {
+favoriteSportsRouter.delete("/", async (req: Request, res: Response) => {
+    const userId: number = parseInt(req.body.userAuth.userId, 10);
+    const favoriteSport: FavoriteSport = req.body.FavoriteSports;
+    favoriteSport.user_id = userId;
     try {
-        const favoriteSportId: number = parseInt(req.params.id, 10);
-        const deletedFavoriteSport =await FavoriteSportService.remove(favoriteSportId);
+        const deletedFavoriteSport = await FavoriteSportService.remove(favoriteSport);
         res.status(200).send(deletedFavoriteSport);
     } catch (e) {
         res.status(500).send(e.message);

@@ -7,7 +7,7 @@ import * as TeamMemberService from "../team_members/teamMembers.service";
 export const profileRouter = express.Router();
 
 
-// GET profile/ (Get information about a player and create a profile)
+// GET profile/ (Get information about logged in player and create a profile)
 profileRouter.get("/", async (req: Request, res: Response) => {
     // const playerId: number = parseInt(req.params.id, 10);
     const userId: number = parseInt(req.body.userAuth.userId, 10);
