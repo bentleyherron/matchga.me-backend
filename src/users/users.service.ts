@@ -56,17 +56,11 @@ export const checkUser = async (user: User): Promise < User > => {
     try {
         if (user.username) {
             const usernameExists: any = await db.result(`select exists(select 1 from users where LOWER(username)=$1)`, [user.username.toLowerCase()]);
-            const result: any = {usernameFound: false}
-            if (usernameExists) {
-                result.usernameFound = true;
-            }
+            const result: any = {usernameFound: usernameExists.rows[0].exists};
             return result;
         } else if (user.email) {
             const emailExists: any = await db.result(`select exists(select 1 from users where LOWER(email)=$1)`, [user.email.toLowerCase()]);
-            const result: any = {emailFound: false}
-            if (emailExists) {
-                result.emailFound = true;
-            }
+            const result: any = {emailFound: emailExists.rows[0].exists};
             return result;
         }
 
