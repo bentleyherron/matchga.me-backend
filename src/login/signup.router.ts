@@ -21,7 +21,7 @@ signupRouter.post("/", async (req: Request, res: Response) => {
         if (userCreated) {
             const teamCreated: object = await createUserTeam(userCreated);
             const teamLinked: object = await addUserToTheirTeam(userCreated, teamCreated)
-            res.status(201).send('User Created');
+            res.status(201).send(userCreated.token);
         };
     } catch (e) {
         res.status(404).send(e.message);
