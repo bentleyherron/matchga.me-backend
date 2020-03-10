@@ -3,12 +3,17 @@ import * as dotenv from "dotenv";
 // Use dotenv for environment variables
 dotenv.config();
 
-const pgp = require('pg-promise')({
-    query: (e: any) => {
-        // print the SQL query
-        console.log(`QUERY: ${e.query}`);
-    }
-});
+let initOptions: any;
+if (process.env.NODE_ENV === "production") {
+    initOptions = {};
+} else {
+    initOptions = {
+        query: (e: any) => {
+            console.log(`QUERY: ${e.query}`);
+        }};
+}
+
+const pgp = require('pg-promise')(initOptions);
 
 const options: object = {
     host: process.env.DB_HOST,

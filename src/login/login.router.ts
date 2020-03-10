@@ -17,10 +17,10 @@ loginRouter.post("/", async (req: Request, res: Response) => {
         }
         const result = await LoginService.login(userInfo);
         if (!result) {
-            return res.status(400).send({'message': 'The credentials you provided is incorrect'});
+            return res.status(400).send({'message': 'The credentials you provided are incorrect'});
         }
         if (!Helper.comparePassword(result.password, userInfo.password)) {
-            return res.status(400).send({'message': 'The credentials you provided is incorrect'});
+            return res.status(400).send({'message': 'The credentials you provided are incorrect'});
         }
         const token = Helper.generateToken(result.id);
         return res.status(200).send({token});
