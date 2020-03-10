@@ -2,6 +2,8 @@ import express, { Request, Response } from "express";
 import * as FavoriteSportService from "./favoriteSports.service";
 import { FavoriteSport } from "./favoriteSport.interface";
 import { FavoriteSports } from "./favoriteSports.interface";
+import { Team } from "../teams/team.interface";
+import * as TeamService from "../teams/teams.service";
 
 export const favoriteSportsRouter = express.Router();
 
@@ -44,13 +46,41 @@ favoriteSportsRouter.post("/", async (req: Request, res: Response) => {
     }
 });
 
-// DELETE favorite-sports/:id
-favoriteSportsRouter.delete("/", async (req: Request, res: Response) => {
+// DELETE favorite-sports/user
+favoriteSportsRouter.delete("/user", async (req: Request, res: Response) => {
     const userId: number = parseInt(req.body.userAuth.userId, 10);
-    const favoriteSport: FavoriteSport = req.body.FavoriteSports;
-    favoriteSport.user_id = userId;
+    let favoriteSports: any = req.body.favoriteSports;
+    favoriteSports = favoriteSports.map((favoriteSport: FavoriteSport) => {
+        favoriteSport.user_id = userId
+        return favoriteSport;
+    });
     try {
-        const deletedFavoriteSport = await FavoriteSportService.remove(favoriteSport);
+        const deletedFavoriteSport: any = await Promise.all(favoriteSports.map(async (favoriteSport: FavoriteSport) => {
+            return await FavoriteSportService.remove(favoriteSport)
+        }));
+        const deletedRows = deletedFavoriteSport.map((item: any) => item.rows)
+        res.status(200).send(deletedRows);
+    } catch (e) {
+        res.status(500).send(e.message);
+    }
+});
+
+// DELETE favorite-sports/team
+favoriteSportsRouter.delete("/team", async (req: Request, res: Response) => {
+    const userId: number = parseInt(req.body.userAuth.userId, 10);
+    const favoriteSports: any = req.body.FavoriteSports;
+    const FavoriteSportsCaptains: number[] = await Promise.all(favoriteSports.map(async (favoriteSport: FavoriteSport) => {
+        if (favoriteSport.team_id) {
+            const team: Team = await TeamService.find(favoriteSport.team_id);
+            return team.captain_id;
+        }
+    })); 
+    try {
+        const deletedFavoriteSport = await Promise.all(favoriteSports.map(async (favoriteSport: FavoriteSport) => {
+            if (userId in FavoriteSportsCaptains) {
+                return await FavoriteSportService.remove(favoriteSport)
+            }
+        }));
         res.status(200).send(deletedFavoriteSport);
     } catch (e) {
         res.status(500).send(e.message);
