@@ -4,6 +4,7 @@ import * as TeamMemberService from "../team_members/teamMembers.service";
 import { User } from "../users/user.interface";
 import { Team } from "../teams/team.interface";
 import { TeamMember } from "../team_members/teamMember.interface";
+import { TeamMembers } from "../team_members/teamMembers.interface";
 
 
 export async function createUserTeam(userCreated: any) {
@@ -28,10 +29,10 @@ export async function createUserTeam(userCreated: any) {
 };
 
 export async function addUserToTheirTeam(userCreated: any, teamCreated: any) {
-    const teamMemberObj: TeamMember = {
+    const teamMemberObj: TeamMembers = [{
         player_id: userCreated.id,
         team_id: teamCreated.id
-    } 
+    }] 
     const teamMemberAdded: any = await TeamMemberService.create(teamMemberObj)
     
     if (teamMemberAdded) {
