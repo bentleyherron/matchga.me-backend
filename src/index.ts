@@ -36,17 +36,16 @@ app.use(express.json({limit: '1mb'}));
 
 // Routing
 app.use('/login', loginRouter);
-// app.use("/users", Auth.verifyToken, usersRouter);
-app.use("/users", usersRouter);
-app.use("/events", eventsRouter);
-app.use("/teams", teamsRouter);
-app.use("/team-members", teamMembersRouter);
-app.use("/states", statesRouter);
-app.use("/profile", profileRouter);
-app.use("/scores", scoresRouter);
-app.use("/sports", sportsRouter);
-app.use("/favorite-sports", favoriteSportsRouter);
-app.use("/challenges", challengesRouter);
+app.use("/users", Auth.verifyToken, usersRouter);
+app.use("/events", Auth.verifyToken, eventsRouter);
+app.use("/teams", Auth.verifyToken, teamsRouter);
+app.use("/team-members", Auth.verifyToken, teamMembersRouter);
+app.use("/states", Auth.verifyToken, statesRouter);
+app.use("/profile", Auth.verifyToken, profileRouter);
+app.use("/scores", Auth.verifyToken, scoresRouter);
+app.use("/sports", Auth.verifyToken, sportsRouter);
+app.use("/favorite-sports", Auth.verifyToken, favoriteSportsRouter);
+app.use("/challenges", Auth.verifyToken, challengesRouter);
 
 // Error Handling and 404
 app.use(errorHandler);
