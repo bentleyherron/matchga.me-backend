@@ -48,7 +48,7 @@ export const getPlayerProfile = async (player_id: number): Promise < UserProfile
 export const getTeamProfile = async (teamId: number): Promise < TeamProfile > => {
     try {
         const teamInfo: Team = await TeamService.find(teamId);
-        const teamMemberProfiles: any = await db.any(`select * from users where id in (select player_id from team_members where team_id=$1)`, [teamId]);
+        const teamMemberProfiles: any = await db.any(`select id, username, nickname, city_id, joined_date, last_logged_in, player_rating, photo from users where id in (select player_id from team_members where team_id=$1)`, [teamId]);
         const teamScores: any = await db.any('select * from scores where team_id=$1', [teamId]);
         let initalValue: number = 0;
         const totalScore: number = teamScores.reduce((total: number, item: any) => {return total + item.score}, initalValue);
