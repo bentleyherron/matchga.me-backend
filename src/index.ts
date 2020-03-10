@@ -42,10 +42,10 @@ app.use("/users", Auth.verifyToken, usersRouter);
 app.use("/events", Auth.verifyToken, eventsRouter);
 app.use("/teams", Auth.verifyToken, teamsRouter);
 app.use("/team-members", Auth.verifyToken, teamMembersRouter);
-app.use("/states", Auth.verifyToken, statesRouter);
+app.use("/states", statesRouter);
 app.use("/profile", Auth.verifyToken, profileRouter);
 app.use("/scores", Auth.verifyToken, scoresRouter);
-app.use("/sports", Auth.verifyToken, sportsRouter);
+app.use("/sports", sportsRouter);
 app.use("/favorite-sports", Auth.verifyToken, favoriteSportsRouter);
 app.use("/challenges", Auth.verifyToken, challengesRouter);
 
