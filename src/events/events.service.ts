@@ -23,8 +23,20 @@ export const findAll = async (): Promise < Events > => {
 // Find all events by city id
 export const findAllByCity = async (cityId: number): Promise < Events > => {
     try {
-        const events: Events = await db.any(`select * from events where city_id=$1`, [cityId]);
-        return events;
+        const events: object[] = await db.any(`select * from events where city_id=$1`, [cityId]);
+        const eventsWithTeams: any = await Promise.all(events.map(async (event: any) => {
+            const eventTeams: any = await db.any(`select * from event_teams where event_id=$1`, [event.id]);
+            const eventTeamsWithName: any = await Promise.all(eventTeams.map(async (eventTeam: any) => {
+                const teamInfo = await TeamService.find(eventTeam.team_id);
+                eventTeam.team_name = teamInfo.name;
+                return {event, eventTeam};
+            }));
+            return eventTeamsWithName;
+        }));
+
+        if (eventsWithTeams) {
+            return eventsWithTeams.flat();
+        }
     } catch (err) {
         console.log(err)
     }
