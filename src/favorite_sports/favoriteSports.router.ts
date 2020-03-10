@@ -55,10 +55,10 @@ favoriteSportsRouter.delete("/user", async (req: Request, res: Response) => {
         return favoriteSport;
     });
     try {
-        const deletedFavoriteSport: any = await Promise.all(favoriteSports.map(async (favoriteSport: FavoriteSport) => {
+        const deletedFavoriteSport: object[] = await Promise.all(favoriteSports.map(async (favoriteSport: FavoriteSport) => {
             return await FavoriteSportService.remove(favoriteSport)
         }));
-        const deletedRows = deletedFavoriteSport.map((item: any) => item.rows)
+        const deletedRows: any = deletedFavoriteSport.map((item: any) => item.rows);
         res.status(200).send(deletedRows);
     } catch (e) {
         res.status(500).send(e.message);
@@ -76,12 +76,13 @@ favoriteSportsRouter.delete("/team", async (req: Request, res: Response) => {
         }
     })); 
     try {
-        const deletedFavoriteSport = await Promise.all(favoriteSports.map(async (favoriteSport: FavoriteSport) => {
+        const deletedFavoriteSport: object[] = await Promise.all(favoriteSports.map(async (favoriteSport: FavoriteSport) => {
             if (userId in FavoriteSportsCaptains) {
                 return await FavoriteSportService.remove(favoriteSport)
             }
         }));
-        res.status(200).send(deletedFavoriteSport);
+        const deletedRows: any = deletedFavoriteSport.map((item: any) => item.rows);
+        res.status(200).send(deletedRows);
     } catch (e) {
         res.status(500).send(e.message);
     }
