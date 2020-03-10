@@ -70,6 +70,7 @@ create table events (
     date timestamptz,
     description text,
     photo text,
+    wager integer,
     is_public boolean,
     event_occured_on timestamptz
 );

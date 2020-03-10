@@ -10,6 +10,7 @@ export interface Event {
     date: Date;
     description: string;
     photo: any;
+    wager: number;
     is_public: boolean;
     event_occured_on: Date;
 };

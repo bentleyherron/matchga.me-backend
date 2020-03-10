@@ -1,6 +1,7 @@
 import { Event } from "./event.interface";
 import { Events } from "./events.interface";
 import { db } from '../db/connect';
+import * as TeamService from "../teams/teams.service";
 
 
 /**
@@ -36,8 +37,13 @@ export const find = async (eventId: number): Promise < Event > => {
     try {
         const event: Event = await db.one(`select * from events where id=$1;`, [eventId]);
         const eventTeams: any = await db.any(`select * from event_teams where event_id=$1`, [eventId]);
+        const eventTeamsWithName: any = await Promise.all(eventTeams.map(async (eventTeam: any) => {
+            const teamInfo = await TeamService.find(eventTeam.team_id);
+            eventTeam.team_name = teamInfo.name;
+            return eventTeam;
+        }));
         if (event) {
-            const eventInfo: any = {event, eventTeams};
+            const eventInfo: any = {event, eventTeams: eventTeamsWithName};
             return eventInfo;
         };
 
@@ -51,10 +57,10 @@ export const find = async (eventId: number): Promise < Event > => {
 // Create an event
 export const create = async (newEvent: Event, eventTeams: any): Promise < void > => {
     try {
-        const result: any = await db.one(`insert into events (title, team_id, city_id, sport_id, longitude, latitude, winner_id, date, description, photo, is_public, event_occured_on) 
-                                            values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) 
+        const result: any = await db.one(`insert into events (title, team_id, city_id, sport_id, longitude, latitude, winner_id, date, description, photo, is_public, event_occured_on, wager) 
+                                            values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) 
                                         returning *`, 
-                                    [newEvent.title, newEvent.team_id, newEvent.city_id, newEvent.sport_id, newEvent.longitude, newEvent.latitude, newEvent.winner_id, newEvent.date, newEvent.description, newEvent.photo, newEvent.is_public || true, newEvent.event_occured_on]);
+                                    [newEvent.title, newEvent.team_id, newEvent.city_id, newEvent.sport_id, newEvent.longitude, newEvent.latitude, newEvent.winner_id, newEvent.date, newEvent.description, newEvent.photo, newEvent.is_public || true, newEvent.event_occured_on, newEvent.wager]);
         const eventTeamsReturn: any = eventTeams.map(async (team: any) => {
             return await db.one(`insert into event_teams (event_id, team_id) values ($1, $2) returning *`, [result.id, team]);
         });
@@ -73,8 +79,8 @@ export const create = async (newEvent: Event, eventTeams: any): Promise < void >
 // Update an event
 export const update = async (updatedEvent: Event): Promise < void > => {
     try {
-        const result: any = await db.result(`update events set title=COALESCE($1, title), team_id=COALESCE($2, team_id), city_id=COALESCE($3, city_id), sport_id=COALESCE($4, sport_id), longitude=COALESCE($5, longitude), latitude=COALESCE($6, latitude), winner_id=COALESCE($7, winner_id), date=COALESCE($8, date), description=COALESCE($9, description), photo=COALESCE($10, photo), is_public=COALESCE($11, is_public), event_occured_on=COALESCE($12, event_occured_on) where id=$13 returning id`, 
-                                            [updatedEvent.title, updatedEvent.team_id, updatedEvent.city_id, updatedEvent.sport_id, updatedEvent.longitude, updatedEvent.latitude, updatedEvent.winner_id, updatedEvent.date, updatedEvent.description, updatedEvent.photo, updatedEvent.is_public, updatedEvent.event_occured_on, updatedEvent.id])
+        const result: any = await db.result(`update events set title=COALESCE($1, title), team_id=COALESCE($2, team_id), city_id=COALESCE($3, city_id), sport_id=COALESCE($4, sport_id), longitude=COALESCE($5, longitude), latitude=COALESCE($6, latitude), winner_id=COALESCE($7, winner_id), date=COALESCE($8, date), description=COALESCE($9, description), photo=COALESCE($10, photo), is_public=COALESCE($11, is_public), event_occured_on=COALESCE($12, event_occured_on), wager=COALESCE($13, wager) where id=$14 returning id`, 
+                                            [updatedEvent.title, updatedEvent.team_id, updatedEvent.city_id, updatedEvent.sport_id, updatedEvent.longitude, updatedEvent.latitude, updatedEvent.winner_id, updatedEvent.date, updatedEvent.description, updatedEvent.photo, updatedEvent.is_public, updatedEvent.event_occured_on, updatedEvent.wager, updatedEvent.id])
         if (result) {
             return result;
         };
