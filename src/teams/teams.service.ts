@@ -1,6 +1,7 @@
 import { Team } from "./team.interface";
 import { Teams } from "./teams.interface";
 import { db } from '../db/connect';
+import * as StateService from "../states/states.service";
 
 /**
  * Service Methods
@@ -9,8 +10,14 @@ import { db } from '../db/connect';
 // Find all teams
 export const findAll = async (): Promise < Teams > => {
     try {
-        const teams: Teams = await db.any(`select * from teams;`);
-        return teams;
+        const teams: object[] = await db.any(`select * from teams;`);
+        const teamsWithCity: any = await Promise.all(teams.map(async (team: any) => {
+            const city: any = await StateService.getCityInfo(team.city_id);
+            const state: any = await StateService.getStateInfo(city[0].state_id);
+            team.city_state = city[0].city + ', ' + state[0].state_name;
+            return team;
+        }));
+        return teamsWithCity;
     } catch (err) {
         console.log(err)
     }
@@ -21,8 +28,14 @@ export const findAll = async (): Promise < Teams > => {
 // Find all teams by city_id
 export const findAllByCity = async (cityId: number): Promise < Teams > => {
     try {
-        const teams: Teams = await db.any(`select * from teams where city_id=$1`, [cityId]);
-        return teams;
+        const teams: object[] = await db.any(`select * from teams where city_id=$1`, [cityId]);
+        const teamsWithCity: any = await Promise.all(teams.map(async (team: any) => {
+            const city: any = await StateService.getCityInfo(team.city_id);
+            const state: any = await StateService.getStateInfo(city[0].state_id);
+            team.city_state = city[0].city + ', ' + state[0].state_name;
+            return team;
+        }));
+        return teamsWithCity;
     } catch (err) {
         console.log(err)
     }
@@ -34,6 +47,9 @@ export const findAllByCity = async (cityId: number): Promise < Teams > => {
 export const find = async (teamId: number): Promise < Team > => {
     try {
         const record: Team = await db.one(`select * from teams where id=$1;`, [teamId]);
+        const city: any = await StateService.getCityInfo(record.city_id);
+        const state: any = await StateService.getStateInfo(city[0].state_id);
+        record.city_state = city[0].city + ', ' + state[0].state_name;
         const teamScores: any = await db.any('select * from scores where team_id=$1', [teamId]);
         let initalValue: number = 0;
         const totalScore: number = teamScores.reduce((total: number, item: any) => {return total + item.score}, initalValue);
