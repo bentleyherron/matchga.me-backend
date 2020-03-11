@@ -12,11 +12,14 @@ import { statesRouter } from "./states/states.router";
 import { profileRouter } from "./profile/profile.router";
 import { scoresRouter } from "./scores/scores.router";
 import { sportsRouter } from "./sports/sports.router";
+import { loginRouter } from "./login/login.router";
 import { favoriteSportsRouter } from "./favorite_sports/favoriteSports.router";
 import { challengesRouter } from "./challenges/challenges.router";
+import { signupRouter } from "./login/signup.router";
 import { leaderboardRouter } from "./leaderboard/leaderboard.router";
 import { errorHandler } from "./middleware/error.middleware";
 import { notFoundHandler } from "./middleware/notFound.middleware";
+import { Auth } from "./middleware/auth.middleware";
 
 // Use dotenv for environment variables
 dotenv.config();
@@ -34,16 +37,18 @@ app.use(cors());
 app.use(express.json({limit: '1mb'}));
 
 // Routing
-app.use("/users", usersRouter);
-app.use("/events", eventsRouter);
-app.use("/teams", teamsRouter);
-app.use("/team-members", teamMembersRouter);
+app.use('/login', loginRouter);
+app.use('/signup', signupRouter);
+app.use("/users", Auth.verifyToken, usersRouter);
+app.use("/events", Auth.verifyToken, eventsRouter);
+app.use("/teams", Auth.verifyToken, teamsRouter);
+app.use("/team-members", Auth.verifyToken, teamMembersRouter);
 app.use("/states", statesRouter);
-app.use("/profile", profileRouter);
-app.use("/scores", scoresRouter);
+app.use("/profile", Auth.verifyToken, profileRouter);
+app.use("/scores", Auth.verifyToken, scoresRouter);
 app.use("/sports", sportsRouter);
-app.use("/favorite-sports", favoriteSportsRouter);
-app.use("/challenges", challengesRouter);
+app.use("/favorite-sports", Auth.verifyToken, favoriteSportsRouter);
+app.use("/challenges", Auth.verifyToken, challengesRouter);
 app.use("/leaderboard", leaderboardRouter);
 
 // Error Handling and 404

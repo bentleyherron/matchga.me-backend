@@ -1,8 +1,4 @@
-import {
-    Request,
-    Response,
-    NextFunction
-} from "express";
+import { Request, Response, NextFunction } from "express";
 
 export const notFoundHandler = (
     request: Request,

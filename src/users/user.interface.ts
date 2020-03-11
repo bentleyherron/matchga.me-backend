@@ -9,4 +9,6 @@ export interface User {
     last_logged_in: Date;
     player_rating: number;
     photo: any;
+    uuid: string;
+    token: string;
 };

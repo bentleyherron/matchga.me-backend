@@ -1,6 +1,8 @@
 import { User } from "./user.interface";
 import { Users } from "./users.interface";
 import { db } from '../db/connect';
+import { Helper } from "../utils/helpers";
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Service Methods
@@ -36,6 +38,9 @@ export const find = async (id: number): Promise < User > => {
         const record: User = await db.one(`select id, username, email, nickname, city_id, joined_date, last_logged_in, player_rating, photo from users where id=$1;`, [id]);
 
         if (record) {
+            delete record.password;
+            delete record.uuid;
+            delete record.token;
             return record;
         };
 
@@ -49,21 +54,13 @@ export const find = async (id: number): Promise < User > => {
 // Check if a user exists
 export const checkUser = async (user: User): Promise < User > => {
     try {
-        const usernameExists: any = await db.result(`select exists(select 1 from users where LOWER(username)=$1)`, [user.username.toLowerCase()]);
-        const emailExists: any = await db.result(`select exists(select 1 from users where LOWER(email)=$1)`, [user.email.toLowerCase()]);
-        const result: any = {usernameFound: false, emailFound: false}
-
-        if (usernameExists.rows[0].exists == true && emailExists.rows[0].exists == true) {
-            result.usernameFound = true;
-            result.emailFound = true;
+        if (user.username) {
+            const usernameExists: any = await db.result(`select exists(select 1 from users where LOWER(username)=$1)`, [user.username.toLowerCase()]);
+            const result: any = {usernameFound: usernameExists.rows[0].exists};
             return result;
-        } else if (usernameExists.rows[0].exists == true && emailExists.rows[0].exists == false) {
-            result.usernameFound = true;
-            return result;
-        } else if (usernameExists.rows[0].exists == false && emailExists.rows[0].exists == true) {
-            result.emailFound = true;
-            return result;
-        } else {
+        } else if (user.email) {
+            const emailExists: any = await db.result(`select exists(select 1 from users where LOWER(email)=$1)`, [user.email.toLowerCase()]);
+            const result: any = {emailFound: emailExists.rows[0].exists};
             return result;
         }
 
@@ -77,11 +74,16 @@ export const checkUser = async (user: User): Promise < User > => {
 // Create a user
 export const create = async (newUser: User): Promise < void > => {
     try {
-        const result: any = await db.one(`insert into users (username, email, password, nickname, city_id, joined_date, player_rating, photo) 
-                                            values ($1, $2, $3, $4, $5, $6, $7, $8) 
+        const hashPassword: string = Helper.hashPassword(newUser.password);
+        newUser.password = hashPassword;
+        newUser.uuid = uuidv4();
+        const result: any = await db.one(`insert into users (username, email, password, nickname, city_id, joined_date, player_rating, photo, uuid) 
+                                            values ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
                                         returning *`, 
-                                    [newUser.username, newUser.email, newUser.password, newUser.nickname, newUser.city_id, new Date(), 5, newUser.photo])
+                                    [newUser.username, newUser.email, newUser.password, newUser.nickname, newUser.city_id, new Date(), 5, newUser.photo, newUser.uuid])
         if (result) {
+            const token: any = Helper.generateToken(result.uuid);
+            result.token = token
             return result;
         };
     } catch (err) {

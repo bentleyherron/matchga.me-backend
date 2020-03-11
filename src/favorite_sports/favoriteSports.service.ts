@@ -49,14 +49,25 @@ export const add = async (favoriteSports: any): Promise < void > => {
 };
 
 // Removes a favorite sport
-export const remove = async (favorite_Sport_id: number): Promise < void > => {
-    try {
-        const record: any = await db.result(`delete from favorite_sports where id=$1 RETURNING *`, [favorite_Sport_id])
-        if (record) {
-            return record;
-        };
-    } catch (err) {
-        console.log(err)
+export const remove = async (favoriteSport: FavoriteSport): Promise < void > => {
+    if (favoriteSport.team_id) {
+        try {
+            const record: any = await db.result(`delete from favorite_sports where id=$1 and team_id=$2 RETURNING *`, [favoriteSport.id, favoriteSport.team_id])
+            if (record) {
+                return record;
+            };
+        } catch (err) {
+            console.log(err)
+        }
+    } else {
+        try {
+            const record: any = await db.result(`delete from favorite_sports where id=$1 and user_id=$2 RETURNING *`, [favoriteSport.id, favoriteSport.user_id])
+            if (record) {
+                return record;
+            };
+        } catch (err) {
+            console.log(err)
+        }
     }
 
     throw new Error("No favorite sport record found to delete");

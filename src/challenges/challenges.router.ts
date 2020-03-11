@@ -2,6 +2,8 @@ import express, { Request, Response } from "express";
 import * as ChallengeService from "./challenges.service";
 import { Challenge } from "./challenge.interface";
 import { Challenges } from "./challenges.interface";
+import * as TeamService from "../teams/teams.service";
+import { Team } from "../teams/team.interface";
 
 export const challengesRouter = express.Router();
 
@@ -51,22 +53,35 @@ challengesRouter.post("/", async (req: Request, res: Response) => {
 
 // PUT challenges/
 challengesRouter.put("/", async (req: Request, res: Response) => {
-    try {
-        const challenge: Challenge = req.body.challenge;
-        const updatedChallenge: any = await ChallengeService.update(challenge);
-        res.status(200).send(updatedChallenge);
-    } catch (e) {
-        res.status(500).send(e.message);
+    const userId: number = parseInt(req.body.userAuth.userId, 10);
+    const challenge: Challenge = req.body.challenge;
+    const team: Team = await TeamService.find(challenge.team_from_id);
+    if (team.captain_id === userId) {
+        try {
+            const updatedChallenge: any = await ChallengeService.update(challenge);
+            res.status(200).send(updatedChallenge);
+        } catch (e) {
+            res.status(500).send(e.message);
+        }
+    } else {
+        res.status(403).send("Could not update challenge");
     }
 });
 
 // DELETE challenges/:id
 challengesRouter.delete("/:id", async (req: Request, res: Response) => {
-    try {
-        const challengeId: number = parseInt(req.params.id, 10);
-        const deletedChallenge = await ChallengeService.remove(challengeId);
-        res.status(200).send(deletedChallenge);
-    } catch (e) {
-        res.status(500).send(e.message);
+    const userId: number = parseInt(req.body.userAuth.userId, 10);
+    const challengeId: number = parseInt(req.params.id, 10);
+    const challenge: Challenge = await ChallengeService.find(challengeId);
+    const team: Team = await TeamService.find(challenge.team_from_id);
+    if (team.captain_id === userId) {
+        try {
+            const deletedChallenge = await ChallengeService.remove(challengeId);
+            res.status(200).send(deletedChallenge);
+        } catch (e) {
+            res.status(500).send(e.message);
+        }
+    } else {
+        res.status(403).send("Could not delete challenge");
     }
 });
