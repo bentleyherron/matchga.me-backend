@@ -2,6 +2,7 @@ import { Event } from "./event.interface";
 import { Events } from "./events.interface";
 import { db } from '../db/connect';
 import * as TeamService from "../teams/teams.service";
+import * as StateService from "../states/states.service";
 
 
 /**
@@ -11,8 +12,14 @@ import * as TeamService from "../teams/teams.service";
 // Find all events
 export const findAll = async (): Promise < Events > => {
     try {
-        const events: Events = await db.any(`select * from events;`);
-        return events;
+        const events: any = await db.any(`select * from events;`);
+        const eventsWithCity: any = await Promise.all(events.map(async (event: any) => {
+            const city: any = await StateService.getCityInfo(event.city_id);
+            const state: any = await StateService.getStateInfo(city[0].state_id);
+            event.city_state = city[0].city + ', ' + state[0].state_name;
+            return event;
+        }));
+        return eventsWithCity;
     } catch (err) {
         console.log(err)
     }
@@ -24,7 +31,13 @@ export const findAll = async (): Promise < Events > => {
 export const findAllByCity = async (cityId: number): Promise < Events > => {
     try {
         const events: object[] = await db.any(`select * from events where city_id=$1`, [cityId]);
-        const eventsWithTeams: any = await Promise.all(events.map(async (event: any) => {
+        const eventsWithCity: any = await Promise.all(events.map(async (event: any) => {
+            const city: any = await StateService.getCityInfo(event.city_id);
+            const state: any = await StateService.getStateInfo(city[0].state_id);
+            event.city_state = city[0].city + ', ' + state[0].state_name;
+            return event;
+        }));
+        const eventsWithTeams: any = await Promise.all(eventsWithCity.map(async (event: any) => {
             const eventTeams: any = await db.any(`select * from event_teams where event_id=$1`, [event.id]);
             const eventTeamsWithName: any = await Promise.all(eventTeams.map(async (eventTeam: any) => {
                 const teamInfo = await TeamService.find(eventTeam.team_id);
@@ -47,7 +60,10 @@ export const findAllByCity = async (cityId: number): Promise < Events > => {
 // Find a single event
 export const find = async (eventId: number): Promise < Event > => {
     try {
-        const event: Event = await db.one(`select * from events where id=$1;`, [eventId]);
+        const event: any = await db.one(`select * from events where id=$1;`, [eventId]);
+        const city: any = await StateService.getCityInfo(event.city_id);
+        const state: any = await StateService.getStateInfo(city[0].state_id);
+        event.city_state = city[0].city + ', ' + state[0].state_name;
         const eventTeams: any = await db.any(`select * from event_teams where event_id=$1`, [eventId]);
         const eventTeamsWithName: any = await Promise.all(eventTeams.map(async (eventTeam: any) => {
             const teamInfo = await TeamService.find(eventTeam.team_id);
