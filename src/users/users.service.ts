@@ -82,8 +82,6 @@ export const create = async (newUser: User): Promise < void > => {
                                         returning *`, 
                                     [newUser.username, newUser.email, newUser.password, newUser.nickname, newUser.city_id, new Date(), 5, newUser.photo, newUser.uuid])
         if (result) {
-            const token: any = Helper.generateToken(result.uuid);
-            result.token = token
             return result;
         };
     } catch (err) {
