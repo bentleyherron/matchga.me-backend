@@ -19,12 +19,10 @@ const options: object = {
 };
 
 let db: any;
-// if (process.env.NODE_ENV === "production") {
-//     db = pgp(process.env.DATABASE_URL);
-// } else {
-//     db = pgp(options);
-// }
-
-db = pgp(process.env.DATABASE_URL);
+if (process.env.NODE_ENV === "production") {
+    db = pgp(process.env.DATABASE_URL);
+} else {
+    db = pgp(options);
+}
 
 export {db};
