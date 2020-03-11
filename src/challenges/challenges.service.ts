@@ -48,10 +48,10 @@ export const find = async (challengeId: number): Promise < Challenge > => {
 // Create an challenge
 export const create = async (newChallenge: Challenge): Promise < void > => {
     try {
-        const result: any = await db.one(`insert into challenges (team_from_id, team_to_id, city_id, sport_id, longitude, latitude, datetime, message, wager, is_accepted) 
-                                            values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) 
+        const result: any = await db.one(`insert into challenges (title, team_from_id, team_to_id, city_id, sport_id, longitude, latitude, datetime, message, wager, is_accepted) 
+                                            values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) 
                                         returning *`, 
-                                    [newChallenge.team_from_id, newChallenge.team_to_id, newChallenge.city_id, newChallenge.sport_id, newChallenge.longitude, newChallenge.latitude, newChallenge.datetime, newChallenge.message, newChallenge.wager, newChallenge.is_accepted || false])
+                                    [newChallenge.title, newChallenge.team_from_id, newChallenge.team_to_id, newChallenge.city_id, newChallenge.sport_id, newChallenge.longitude, newChallenge.latitude, newChallenge.datetime, newChallenge.message, newChallenge.wager, newChallenge.is_accepted || false])
         if (result) {
             return result;
         };
@@ -65,8 +65,8 @@ export const create = async (newChallenge: Challenge): Promise < void > => {
 // Update an challenge
 export const update = async (updatedChallenge: Challenge): Promise < void > => {
     try {
-        const result: any = await db.result(`update challenges set team_from_id=COALESCE($1, team_from_id), team_to_id=COALESCE($2, team_to_id), city_id=COALESCE($3, city_id), sport_id=COALESCE($4, sport_id), longitude=COALESCE($5, longitude), latitude=COALESCE($6, latitude), datetime=COALESCE($7, datetime), message=COALESCE($8, message), wager=COALESCE($9, wager), is_accepted=COALESCE($10, is_accepted) where id=$11 returning id`, 
-                                    [updatedChallenge.team_from_id, updatedChallenge.team_to_id, updatedChallenge.city_id, updatedChallenge.sport_id, updatedChallenge.longitude, updatedChallenge.latitude, updatedChallenge.datetime, updatedChallenge.message, updatedChallenge.wager, updatedChallenge.is_accepted, updatedChallenge.id])
+        const result: any = await db.result(`update challenges set team_from_id=COALESCE($1, team_from_id), team_to_id=COALESCE($2, team_to_id), city_id=COALESCE($3, city_id), sport_id=COALESCE($4, sport_id), longitude=COALESCE($5, longitude), latitude=COALESCE($6, latitude), datetime=COALESCE($7, datetime), message=COALESCE($8, message), wager=COALESCE($9, wager), is_accepted=COALESCE($10, is_accepted) title=COALESCE($11, title) where id=$12 returning id`, 
+                                    [updatedChallenge.team_from_id, updatedChallenge.team_to_id, updatedChallenge.city_id, updatedChallenge.sport_id, updatedChallenge.longitude, updatedChallenge.latitude, updatedChallenge.datetime, updatedChallenge.message, updatedChallenge.wager, updatedChallenge.is_accepted, updatedChallenge.title, updatedChallenge.id])
         if (result) {
             return result;
         };
