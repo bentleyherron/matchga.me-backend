@@ -43,12 +43,12 @@ teamsRouter.get("/city/:id", async (req: Request, res: Response) => {
 teamsRouter.post("/", async (req: Request, res: Response) => {
     try {
         const team: Team = req.body.team;
-        const createdTeamId: any = await TeamService.create(team);
-        if (createdTeamId) {
+        const createdTeam: any = await TeamService.create(team);
+        if (createdTeam) {
             const captainIdtoUserId: object = {id: team.captain_id}
-            const userAddedToTeam: any = await addUserToTheirTeam(captainIdtoUserId, createdTeamId);
+            const userAddedToTeam: any = await addUserToTheirTeam(captainIdtoUserId, createdTeam);
         }
-        res.sendStatus(201);
+        res.status(201).send(createdTeam);
     } catch (e) {
         res.status(404).send(e.message);
     }
