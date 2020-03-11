@@ -31,8 +31,8 @@ teamMembersRouter.get("/team/:id", async (req: Request, res: Response) => {
 // POST teams-members/
 teamMembersRouter.post("/", async (req: Request, res: Response) => {
     try {
-        const teamMember: TeamMember = req.body.teamMember;
-        const createdTeam: any = await TeamMemberService.create(teamMember);
+        const teamMembers: TeamMembers = req.body.teamMembers;
+        const createdTeam: any = await TeamMemberService.create(teamMembers);
         res.status(201).send(createdTeam);
     } catch (e) {
         res.status(404).send(e.message);
