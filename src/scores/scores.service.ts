@@ -67,7 +67,7 @@ export const create = async (score: Score): Promise < void > => {
 // Update a score
 export const update = async (updatedScore: Score): Promise < void > => {
     try {
-        const result: any = await db.result(`update scores set score=$1 where event_id=$2 returning id`, 
+        const result: any = await db.result(`update scores set score=COALESCE($1, score) where event_id=$2 returning id`, 
                         [updatedScore.score, updatedScore.event_id])
         if (result) {
             return result;

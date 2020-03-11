@@ -65,7 +65,7 @@ export const create = async (newChallenge: Challenge): Promise < void > => {
 // Update an challenge
 export const update = async (updatedChallenge: Challenge): Promise < void > => {
     try {
-        const result: any = await db.result(`update challenges set team_from_id=$1, team_to_id=$2, city_id=$3, sport_id=$4, longitude=$5, latitude=$6, datetime=$7, message=$8, wager=$9, is_accepted=$10 where id=$11 returning id`, 
+        const result: any = await db.result(`update challenges set team_from_id=COALESCE($1, team_from_id), team_to_id=COALESCE($2, team_to_id), city_id=COALESCE($3, city_id), sport_id=COALESCE($4, sport_id), longitude=COALESCE($5, longitude), latitude=COALESCE($6, latitude), datetime=COALESCE($7, datetime), message=COALESCE($8, message), wager=COALESCE($9, wager), is_accepted=COALESCE($10, is_accepted) where id=$11 returning id`, 
                                     [updatedChallenge.team_from_id, updatedChallenge.team_to_id, updatedChallenge.city_id, updatedChallenge.sport_id, updatedChallenge.longitude, updatedChallenge.latitude, updatedChallenge.datetime, updatedChallenge.message, updatedChallenge.wager, updatedChallenge.is_accepted, updatedChallenge.id])
         if (result) {
             return result;

@@ -5,6 +5,7 @@ import { User } from "../users/user.interface";
 import { Team } from "../teams/team.interface";
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { TeamMember } from "../team_members/teamMember.interface";
 import { TeamMembers } from "../team_members/teamMembers.interface";
 
 

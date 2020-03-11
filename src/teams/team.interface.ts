@@ -9,4 +9,5 @@ export interface Team {
     creation_date: Date;
     is_solo: boolean;
     team_score?: number;
+    city_state?: string;
 };

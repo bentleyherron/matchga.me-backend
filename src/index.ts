@@ -16,6 +16,7 @@ import { loginRouter } from "./login/login.router";
 import { favoriteSportsRouter } from "./favorite_sports/favoriteSports.router";
 import { challengesRouter } from "./challenges/challenges.router";
 import { signupRouter } from "./login/signup.router";
+import { leaderboardRouter } from "./leaderboard/leaderboard.router";
 import { errorHandler } from "./middleware/error.middleware";
 import { notFoundHandler } from "./middleware/notFound.middleware";
 import { Auth } from "./middleware/auth.middleware";
@@ -48,6 +49,7 @@ app.use("/scores", Auth.verifyToken, scoresRouter);
 app.use("/sports", sportsRouter);
 app.use("/favorite-sports", Auth.verifyToken, favoriteSportsRouter);
 app.use("/challenges", Auth.verifyToken, challengesRouter);
+app.use("/leaderboard", leaderboardRouter);
 
 // Error Handling and 404
 app.use(errorHandler);
