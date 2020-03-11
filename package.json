@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build-ts": "tsc --outDir dist",
+    "build-ts": "tsc src/*.ts --outDir dist",
     "postinstall": "npm run build-ts",
-    "start": "node dist/src/index.js",
+    "start": "node dist/index.js",
     "dev:start": "node dist/index",
     "dev:webpack": "webpack --config webpack.config.ts",
     "db:delete": "dropdb matchgame",

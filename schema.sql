@@ -61,7 +61,6 @@ create table favorite_sports (
 create table events (
     id serial primary key,
     title text,
-    team_id integer references teams(id),
     city_id integer references us_cities(id),
     sport_id integer references sports(id),
     longitude float,

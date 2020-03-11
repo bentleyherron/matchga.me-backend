@@ -85,10 +85,10 @@ export const find = async (eventId: number): Promise < Event > => {
 // Create an event
 export const create = async (newEvent: Event, eventTeams: any): Promise < void > => {
     try {
-        const result: any = await db.one(`insert into events (title, team_id, city_id, sport_id, longitude, latitude, winner_id, date, description, photo, is_public, event_occured_on, wager) 
-                                            values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) 
+        const result: any = await db.one(`insert into events (title, city_id, sport_id, longitude, latitude, winner_id, date, description, photo, is_public, event_occured_on, wager) 
+                                            values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) 
                                         returning *`, 
-                                    [newEvent.title, newEvent.team_id, newEvent.city_id, newEvent.sport_id, newEvent.longitude, newEvent.latitude, newEvent.winner_id, newEvent.date, newEvent.description, newEvent.photo, newEvent.is_public || true, newEvent.event_occured_on, newEvent.wager]);
+                                    [newEvent.title, newEvent.city_id, newEvent.sport_id, newEvent.longitude, newEvent.latitude, newEvent.winner_id, newEvent.date, newEvent.description, newEvent.photo, newEvent.is_public || true, newEvent.event_occured_on, newEvent.wager]);
         const eventTeamsReturn: any = eventTeams.map(async (team: any) => {
             return await db.one(`insert into event_teams (event_id, team_id) values ($1, $2) returning *`, [result.id, team]);
         });
@@ -107,8 +107,8 @@ export const create = async (newEvent: Event, eventTeams: any): Promise < void >
 // Update an event
 export const update = async (updatedEvent: Event): Promise < void > => {
     try {
-        const result: any = await db.result(`update events set title=COALESCE($1, title), team_id=COALESCE($2, team_id), city_id=COALESCE($3, city_id), sport_id=COALESCE($4, sport_id), longitude=COALESCE($5, longitude), latitude=COALESCE($6, latitude), winner_id=COALESCE($7, winner_id), date=COALESCE($8, date), description=COALESCE($9, description), photo=COALESCE($10, photo), is_public=COALESCE($11, is_public), event_occured_on=COALESCE($12, event_occured_on), wager=COALESCE($13, wager) where id=$14 returning id`, 
-                                            [updatedEvent.title, updatedEvent.team_id, updatedEvent.city_id, updatedEvent.sport_id, updatedEvent.longitude, updatedEvent.latitude, updatedEvent.winner_id, updatedEvent.date, updatedEvent.description, updatedEvent.photo, updatedEvent.is_public, updatedEvent.event_occured_on, updatedEvent.wager, updatedEvent.id])
+        const result: any = await db.result(`update events set title=COALESCE($1, title), city_id=COALESCE($2, city_id), sport_id=COALESCE($3, sport_id), longitude=COALESCE($4, longitude), latitude=COALESCE($5, latitude), winner_id=COALESCE($6, winner_id), date=COALESCE($7, date), description=COALESCE($8, description), photo=COALESCE($9, photo), is_public=COALESCE($10, is_public), event_occured_on=COALESCE($11, event_occured_on), wager=COALESCE($12, wager) where id=$13 returning id`, 
+                                            [updatedEvent.title, updatedEvent.city_id, updatedEvent.sport_id, updatedEvent.longitude, updatedEvent.latitude, updatedEvent.winner_id, updatedEvent.date, updatedEvent.description, updatedEvent.photo, updatedEvent.is_public, updatedEvent.event_occured_on, updatedEvent.wager, updatedEvent.id])
         if (result) {
             return result;
         };
