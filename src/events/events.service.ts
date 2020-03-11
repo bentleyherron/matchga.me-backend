@@ -42,6 +42,7 @@ export const findAllByCity = async (cityId: number): Promise < Events > => {
             const eventTeamsWithName: any = await Promise.all(eventTeams.map(async (eventTeam: any) => {
                 const teamInfo = await TeamService.find(eventTeam.team_id);
                 eventTeam.team_name = teamInfo.name;
+                eventTeam.photo = teamInfo.photo;
                 return {eventTeam};
             }));
             return {event, eventTeams: eventTeamsWithName};
