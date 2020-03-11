@@ -42,13 +42,13 @@ export const findAllByCity = async (cityId: number): Promise < Events > => {
             const eventTeamsWithName: any = await Promise.all(eventTeams.map(async (eventTeam: any) => {
                 const teamInfo = await TeamService.find(eventTeam.team_id);
                 eventTeam.team_name = teamInfo.name;
-                return {event, eventTeam};
+                return {eventTeam};
             }));
-            return eventTeamsWithName;
+            return {event, eventTeams: eventTeamsWithName};
         }));
 
         if (eventsWithTeams) {
-            return eventsWithTeams.flat();
+            return eventsWithTeams;
         }
     } catch (err) {
         console.log(err)
