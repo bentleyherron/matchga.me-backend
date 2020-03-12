@@ -55,7 +55,7 @@ challengesRouter.post("/", async (req: Request, res: Response) => {
 challengesRouter.put("/", async (req: Request, res: Response) => {
     const userId: number = parseInt(req.body.userAuth.userId, 10);
     const challenge: Challenge = req.body.challenge;
-    const team: Team = await TeamService.find(challenge.team_from_id);
+    const team: Team = await TeamService.find(challenge.team_to_id);
     if (team.captain_id === userId) {
         try {
             const updatedChallenge: any = await ChallengeService.update(challenge);
