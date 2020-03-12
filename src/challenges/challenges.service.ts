@@ -1,6 +1,7 @@
 import { Challenge } from "./challenge.interface";
 import { Challenges } from "./challenges.interface";
 import { db } from '../db/connect';
+import * as TeamService from "../teams/teams.service";
 
 
 /**
@@ -21,8 +22,18 @@ export const findAll = async (): Promise < Challenges > => {
 // Find all challenges
 export const findAllByCity = async (cityId: number): Promise < Challenges > => {
     try {
-        const challenges: Challenges = await db.any(`select * from challenges where city_id=$1;`, [cityId]);
-        return challenges;
+        // const challenges: Challenges = await db.any(`select * from challenges where city_id=$1;`, [cityId]);
+        // return challenges;
+        const challenges: object[] = await db.any(`select * from challenges where city_id=$1`, [cityId]);
+        const challengesWithTeams: any = await Promise.all(challenges.map(async (challenge: any) => {
+            const teamInfo = await TeamService.find(challenge.team_from_id);
+            return {event, team_from_name: teamInfo.name};
+        }));
+        
+        if (challengesWithTeams) {
+            return challengesWithTeams;
+        };
+        
     } catch (err) {
         console.log(err)
     }
