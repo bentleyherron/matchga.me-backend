@@ -5,6 +5,7 @@ import { Teams } from "./teams.interface";
 import { addUserToTheirTeam } from "../utils/helpers";
 import * as ScoreService from "../scores/scores.service";
 import { Score } from "../scores/score.interface";
+import { Scores } from "../scores/scores.interface";
 
 export const teamsRouter = express.Router();
 
@@ -48,7 +49,7 @@ teamsRouter.post("/", async (req: Request, res: Response) => {
         const createdTeam: any = await TeamService.create(team);
         if (createdTeam) {
             const captainIdtoUserId: object = {id: team.captain_id};
-            const initialScoreInfo: Score = {team_id: createdTeam.id, score: 1000}
+            const initialScoreInfo: Scores = [{team_id: createdTeam.id, score: 1000}]
             const userAddedToTeam: any = await addUserToTheirTeam(captainIdtoUserId, createdTeam);
             const createdScore: any = await ScoreService.create(initialScoreInfo);
         }
