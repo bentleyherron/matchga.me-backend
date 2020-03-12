@@ -48,12 +48,13 @@ export const findEventScore = async (event_id: number): Promise < Score > => {
 };
 
 // Create a score entry
-export const create = async (score: Score): Promise < void > => {
+export const create = async (scores: any): Promise < void > => {
     try {
-        const result: any = await db.one(`insert into scores (team_id, event_id, score) 
-                                            values ($1, $2, $3) 
-                                        returning *`, 
-                                    [score.team_id, score.event_id, score.score])
+        const results: any = scores.map(async (score: Score) => {
+            return await db.one(`insert into scores (team_id, event_id, score) values ($1, $2, $3) returning *`, 
+                                [score.team_id, score.event_id, score.score])
+        });
+        const result: any = Promise.all(results);
         if (result) {
             return result;
         };

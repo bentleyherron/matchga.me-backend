@@ -31,8 +31,8 @@ scoresRouter.get("/:id", async (req: Request, res: Response) => {
 // POST scores/
 scoresRouter.post("/", async (req: Request, res: Response) => {
     try {
-        const scoreInfo: Score = req.body.score;
-        const createdScore: any = await ScoreService.create(scoreInfo);
+        const scoresInfo: Scores = req.body.scores;
+        const createdScore: any = await ScoreService.create(scoresInfo);
         res.status(201).send(createdScore);
     } catch (e) {
         res.status(404).send(e.message);
