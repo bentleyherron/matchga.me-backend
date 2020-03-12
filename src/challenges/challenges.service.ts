@@ -25,7 +25,7 @@ export const findAllByCity = async (cityId: number): Promise < Challenges > => {
         const challenges: object[] = await db.any(`select * from challenges where city_id=$1`, [cityId]);
         const challengesWithTeams: any = await Promise.all(challenges.map(async (challenge: any) => {
             const teamInfo = await TeamService.find(challenge.team_from_id);
-            return {event, team_from_name: teamInfo.name};
+            return {...challenge, team_from_name: teamInfo.name};
         }));
         
         if (challengesWithTeams) {
