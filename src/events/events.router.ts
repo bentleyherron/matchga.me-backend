@@ -72,9 +72,9 @@ eventsRouter.delete("/:id", async (req: Request, res: Response) => {
         const team: Team = await TeamService.find(event.team_id);
         return team.captain_id;
     })); 
-    if (userId in eventTeamCaptains) {
+    if (eventTeamCaptains.includes(userId)) {
         try {
-            const deletedEvent = await EventService.remove(eventId);
+            const deletedEvent = await EventService.remove(eventId, eventInfo.eventTeams);
             res.status(200).send(deletedEvent);
         } catch (e) {
             res.status(500).send(e.message);
