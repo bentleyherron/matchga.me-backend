@@ -123,10 +123,10 @@ export const update = async (updatedEvent: Event): Promise < void > => {
 // Removes an event
 export const remove = async (eventId: number, eventTeams: any): Promise < void > => {
     try {
-        const record: any = await db.result(`delete from events where id=$1 RETURNING *`, [eventId])
         const eventTeamsReturn: any = eventTeams.map(async (eventTeam: any) => {
             return await db.one(`delete from event_teams where id=$1 returning *`, [eventTeam.id]);
         });
+        const record: any = await db.result(`delete from events where id=$1 RETURNING *`, [eventId]);
         if (record) {
             return record;
         };
